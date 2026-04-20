@@ -1,6 +1,7 @@
 #include "login.h"
 #include "./ui_login.h"
 #include "login_module.h"
+#include "sign_up.h"
 
 Login::Login(QWidget *parent)
     : QWidget(parent)
@@ -36,5 +37,13 @@ void Login::on_login_button_clicked()
         qDebug() << "유저 로그인";
         this->close();
     }
+}
+
+
+void Login::on_sign_up_button_clicked()
+{
+    SignUp* sign_up_page = new SignUp();
+    sign_up_page->setAttribute(Qt::WA_DeleteOnClose);
+    sign_up_page->show();
 }
 

@@ -21,6 +21,8 @@ public:
 private slots:
     void on_login_button_clicked();
 
+    void on_sign_up_button_clicked();
+
 private:
     UserMainpage* user_page =  new UserMainpage();
     Ui::Widget *ui;
