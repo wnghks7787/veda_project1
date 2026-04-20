@@ -5,7 +5,7 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class Login;
+class Widget;
 }
 QT_END_NAMESPACE
 
@@ -18,6 +18,6 @@ public:
     ~Login() override;
 
 private:
-    Ui::Login *ui;
+    Ui::Widget *ui;
 };
 #endif // LOGIN_H
