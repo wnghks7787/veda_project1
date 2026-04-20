@@ -3,7 +3,7 @@
 
 UserMainpage::UserMainpage(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::Widget)
+    , ui(new Ui::MainPage)
 {
     ui->setupUi(this);
 }
