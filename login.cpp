@@ -1,6 +1,5 @@
 #include "login.h"
 #include "./ui_login.h"
-#include "user_mainpage.h"
 #include "login_module.h"
 
 Login::Login(QWidget *parent)
@@ -16,8 +15,8 @@ Login::~Login() {
 void Login::on_pushButton_clicked()
 {
     QString id, pw;
-    id = ui->lineEdit_2->text();
-    pw = ui->lineEdit->text();
+    id = ui->id_line->text();
+    pw = ui->pw_line->text();
 
     LoginModule login_module(id, pw);
 
@@ -37,10 +36,5 @@ void Login::on_pushButton_clicked()
         qDebug() << "유저 로그인";
         this->close();
     }
-    // user_page = new UserMainpage();
-    // user_page->setAttribute(Qt::WA_DeleteOnClose);
-    // user_page->show();
-
-    // this->close();
 }
 
