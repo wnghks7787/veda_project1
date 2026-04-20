@@ -12,7 +12,7 @@ Login::Login(QWidget *parent)
 Login::~Login() {
     delete ui;
 }
-void Login::on_pushButton_clicked()
+void Login::on_login_button_clicked()
 {
     QString id, pw;
     id = ui->id_line->text();

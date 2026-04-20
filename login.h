@@ -19,7 +19,7 @@ public:
     ~Login() override;
 
 private slots:
-    void on_pushButton_clicked();
+    void on_login_button_clicked();
 
 private:
     UserMainpage* user_page =  new UserMainpage();

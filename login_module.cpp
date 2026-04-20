@@ -20,6 +20,11 @@ bool LoginModule::isAdmin()
     }
 }
 
+/**
+ * @author Joohwan Lim
+ * @brief LoginModule::isUser
+ * @return user(admin이 아닌 경우) true를 반환한다.
+ */
 bool LoginModule::isUser()
 {
     return true;
