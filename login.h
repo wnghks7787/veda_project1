@@ -1,5 +1,5 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef LOGIN_H
+#define LOGIN_H
 
 #include <QWidget>
 
@@ -20,4 +20,4 @@ public:
 private:
     Ui::Widget *ui;
 };
-#endif // WIDGET_H
+#endif // LOGIN_H
