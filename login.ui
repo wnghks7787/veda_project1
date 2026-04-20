@@ -15,6 +15,13 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>CheckBox</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="5,1">
      <item>
       <layout class="QVBoxLayout" name="idPwVLayout">
