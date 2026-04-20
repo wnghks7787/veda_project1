@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -24,6 +25,7 @@ class Ui_Widget
 {
 public:
     QHBoxLayout *horizontalLayout_2;
+    QCheckBox *checkBox;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *idPwVLayout;
     QHBoxLayout *idHLayout;
@@ -43,6 +45,11 @@ public:
         Widget->resize(508, 152);
         horizontalLayout_2 = new QHBoxLayout(Widget);
         horizontalLayout_2->setObjectName("horizontalLayout_2");
+        checkBox = new QCheckBox(Widget);
+        checkBox->setObjectName("checkBox");
+
+        horizontalLayout_2->addWidget(checkBox);
+
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName("horizontalLayout");
         idPwVLayout = new QVBoxLayout();
@@ -109,6 +116,7 @@ public:
     void retranslateUi(QWidget *Widget)
     {
         Widget->setWindowTitle(QCoreApplication::translate("Widget", "Widget", nullptr));
+        checkBox->setText(QCoreApplication::translate("Widget", "CheckBox", nullptr));
         label_2->setText(QCoreApplication::translate("Widget", "ID", nullptr));
         label->setText(QCoreApplication::translate("Widget", "PW", nullptr));
         pushButton->setText(QCoreApplication::translate("Widget", "Login", nullptr));
