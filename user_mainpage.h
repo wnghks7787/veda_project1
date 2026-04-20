@@ -5,7 +5,7 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainPage;
+class user_page;
 }
 QT_END_NAMESPACE
 
@@ -18,7 +18,7 @@ public:
     ~UserMainpage() override;
 
 private:
-    Ui::MainPage *ui;
+    Ui::user_page *ui;
 };
 
 #endif // USER_MAINPAGE_H

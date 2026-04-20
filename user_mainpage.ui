@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainPage</class>
- <widget class="QWidget" name="MainPage">
+ <class>user_page</class>
+ <widget class="QWidget" name="user_page">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,16 +15,16 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="main_layout">
      <item row="2" column="1">
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="search_button">
        <property name="text">
         <string>검색</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <spacer name="horizontalSpacer">
+      <spacer name="top_spacer">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
        </property>
@@ -37,19 +37,19 @@
       </spacer>
      </item>
      <item row="3" column="0" colspan="2">
-      <widget class="QListView" name="listView"/>
+      <widget class="QListView" name="main_view"/>
      </item>
     </layout>
    </item>
    <item row="1" column="1">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="withdraw_button">
      <property name="text">
       <string>회원 탈퇴</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="modify_button">
      <property name="text">
       <string>정보 수정</string>
      </property>
