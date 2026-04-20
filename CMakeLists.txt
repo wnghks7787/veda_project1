@@ -31,6 +31,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sign_up.ui
         sign_up.cpp
         sign_up.h
+        user.h user.cpp
 
 
 

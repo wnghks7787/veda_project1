@@ -17,6 +17,9 @@ public:
     explicit UserMainpage(QWidget *parent = nullptr);
     ~UserMainpage() override;
 
+private slots:
+    void on_logout_button_clicked();
+
 private:
     Ui::user_page *ui;
 };
