@@ -9,9 +9,9 @@ public:
     LoginModule(QString id, QString pw);
 
     bool isAdmin();
+    bool isUser();
 
-    void loginWithAdmin();
-    void loginWithUser();
+    int login();
 
     QString getId();
 
@@ -19,7 +19,8 @@ private:
     QString id;
     QString pw;
 
-    bool admin;
+    void loginWithAdmin();
+    void loginWithUser();
 };
 
 #endif // LOGIN_MODULE_H
