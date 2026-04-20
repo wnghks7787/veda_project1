@@ -1,14 +1,14 @@
 #include "login.h"
-#include "./ui_widget.h"
+#include "./ui_login.h"
 
-Widget::Widget(QWidget *parent)
+Login::Login(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::Widget)
+    , ui(new Ui::Login)
 {
     ui->setupUi(this);
 }
 
-Widget::~Widget()
+Login::~Login()
 {
     delete ui;
 }

@@ -5,19 +5,19 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class Widget;
+class Login;
 }
 QT_END_NAMESPACE
 
-class Widget : public QWidget
+class Login : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Widget(QWidget *parent = nullptr);
-    ~Widget() override;
+    explicit Login(QWidget *parent = nullptr);
+    ~Login() override;
 
 private:
-    Ui::Widget *ui;
+    Ui::Login *ui;
 };
 #endif // LOGIN_H
