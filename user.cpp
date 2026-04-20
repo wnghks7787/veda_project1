@@ -67,19 +67,9 @@ int User::getAttendance() const
     return attendance;
 }
 
-void User::setAttendance(int newAttendance)
-{
-    attendance = newAttendance;
-}
-
 int User::getAbsent() const
 {
     return absent;
-}
-
-void User::setAbsent(int newAbsent)
-{
-    absent = newAbsent;
 }
 
 int User::getLate() const
@@ -87,27 +77,12 @@ int User::getLate() const
     return late;
 }
 
-void User::setLate(int newLate)
-{
-    late = newLate;
-}
-
 int User::getEarly_leave() const
 {
     return early_leave;
 }
 
-void User::setEarly_leave(int newEarly_leave)
-{
-    early_leave = newEarly_leave;
-}
-
 int User::getBe_out() const
 {
     return be_out;
-}
-
-void User::setBe_out(int newBe_out)
-{
-    be_out = newBe_out;
 }

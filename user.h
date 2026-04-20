@@ -22,16 +22,12 @@ public:
     void setPhone_num(const QString &newPhone_num);
     int getAge() const;
     void setAge(int newAge);
+
     int getAttendance() const;
-    void setAttendance(int newAttendance);
     int getAbsent() const;
-    void setAbsent(int newAbsent);
     int getLate() const;
-    void setLate(int newLate);
     int getEarly_leave() const;
-    void setEarly_leave(int newEarly_leave);
     int getBe_out() const;
-    void setBe_out(int newBe_out);
 
 private:
     QString name;
