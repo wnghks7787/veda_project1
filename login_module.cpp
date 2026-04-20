@@ -2,12 +2,22 @@
 #include "login_module.h"
 #include "user_mainpage.h"
 
+/**
+ * @author Joohwan Lim
+ * @brief 로그인을 확인하는 부분
+ * @param id 아이디
+ * @param pw 비밀번호
+ */
 LoginModule::LoginModule(QString id, QString pw)
 {
     this->id = id;
     this->pw = pw;
 }
-
+/**
+ * @author Joohwan Lim
+ * @brief 관리자인지 확인
+ * @return ID가 "admin" 이면 true, 그렇지 않으면 false
+ */
 bool LoginModule::isAdmin()
 {
     if(this->id == "admin")
