@@ -168,3 +168,6 @@ CMakeLists.txt.user*
 
 
 build/
+.qtcreator/
+*.user
+CMakeLists.txt.user
