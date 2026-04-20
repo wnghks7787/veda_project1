@@ -11,3 +11,8 @@ UserMainpage::UserMainpage(QWidget *parent)
 UserMainpage::~UserMainpage() {
     delete ui;
 }
+void UserMainpage::on_logout_button_clicked()
+{
+    qDebug() << "로그아웃";
+}
+
