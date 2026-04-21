@@ -1,0 +1,46 @@
+#ifndef USER_H
+#define USER_H
+
+#include <QString>
+#include <QDate>
+
+class User
+{
+public:
+    User();
+    ~User();
+
+    QString getName() const;
+    void setName(const QString &newName);
+    QDate getBirthday() const;
+    void setBirthday(const QDate &newBirthday);
+    QString getId() const;
+    void setId(const QString &newId);
+    QString getPassword() const;
+    void setPassword(const QString &newPassword);
+    QString getPhone_num() const;
+    void setPhone_num(const QString &newPhone_num);
+    int getAge() const;
+    void setAge(int newAge);
+
+    int getAttendance() const;
+    int getAbsent() const;
+    int getLate() const;
+    int getEarly_leave() const;
+    int getBe_out() const;
+
+private:
+    QString name;
+    QDate birthday;
+    QString id;
+    QString password;
+    QString phone_num;
+    int age;
+    int attendance;
+    int absent;
+    int late;
+    int early_leave;
+    int be_out;
+};
+
+#endif // USER_H
