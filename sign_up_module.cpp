@@ -77,6 +77,10 @@ void SignUpModule::createUser()
     }
 }
 
+/**
+ * @brief 비밀번호가 맞는지 확인하는 부분
+ * @return 맞으면 true, 틀리면 false
+ */
 bool SignUpModule::verifyPassword()
 {
     if(password == verify_password)

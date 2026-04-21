@@ -25,6 +25,13 @@ void SignUp::on_buttonBox_accepted()
         ui->phone_edit->text()
     );
 
-    sign_up_module.createUser();
+    if(sign_up_module.verifyPassword())
+    {
+        sign_up_module.createUser();
+    }
+    else
+    {
+        qDebug() << "유저 생성 실패";
+    }
 }
 
