@@ -1,6 +1,5 @@
 #include "login.h"
 #include "./ui_login.h"
-#include "login_module.h"
 #include "sign_up.h"
 
 #include <QMessageBox>
@@ -10,6 +9,10 @@ Login::Login(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    client = new Client(this);
+    client->connectToServer();
+
+    connect(client, SIGNAL(loginResult(bool, QString)), this, SLOT(onLoginResult(bool, QString)));
 }
 
 Login::~Login() {
@@ -21,17 +24,18 @@ void Login::on_login_button_clicked()
     id = ui->id_line->text();
     pw = ui->pw_line->text();
 
-    LoginModule login_module(id, pw);
+    client->sendLogin(id, pw);
+}
 
-    int success = login_module.login();
-
-    if(success == -1)
+void Login::onLoginResult(bool success, QString msg)
+{
+    if(success)
     {
-        return;
+        qDebug() << "success";
     }
     else
     {
-        this->close();
+        qDebug() << "fail";
     }
 }
 

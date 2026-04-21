@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMessageBox>
 #include "user_mainpage.h"
+#include "client.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,11 +24,14 @@ private slots:
     void on_login_button_clicked();
 
     void on_sign_up_button_clicked();
+    void onLoginResult(bool success, QString msg);
 
 private:
     QMessageBox::StandardButton msg_box;
 
     UserMainpage* user_page;
     Ui::Widget *ui;
+
+    Client* client;
 };
 #endif // LOGIN_H
