@@ -17,6 +17,9 @@ public:
     explicit SignUp(QWidget *parent = nullptr);
     ~SignUp() override;
 
+private slots:
+    void on_buttonBox_accepted();
+
 private:
     Ui::sign_up_dialog* ui;
 };

@@ -50,9 +50,6 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="birthday_edit"/>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="verify_pw_label">
        <property name="text">
@@ -100,6 +97,9 @@
         <string>생년월일</string>
        </property>
       </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QDateEdit" name="birthday_edit"/>
      </item>
     </layout>
    </item>
