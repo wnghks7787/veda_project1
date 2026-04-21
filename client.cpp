@@ -32,6 +32,18 @@ void Client::sendLogin(QString id, QString pw)
     socket->write(doc.toJson());
 }
 
+void Client::sendWithdraw(QString id)
+{
+    QJsonObject obj;
+
+    obj["type"] = "withdraw";
+    obj["id"] = id;
+
+    QJsonDocument doc(obj);
+
+    socket->write(doc.toJson());
+}
+
 void Client::onConnected()
 {
     qDebug() << "서버 연결됨";

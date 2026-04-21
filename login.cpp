@@ -33,7 +33,7 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
     {
         qDebug() << "success";
 
-        User* user = new User(user_json);
+        User* user = new User(user_json, client);
 
         msg_box = QMessageBox::information(
             this,

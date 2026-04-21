@@ -14,6 +14,7 @@ public:
 
     void connectToServer(QString host = "127.0.0.1", int port = 12345);
     void sendLogin(QString id, QString pw);
+    void sendWithdraw(QString id);
 
 signals:
     void loginResult(bool success, QJsonObject user);

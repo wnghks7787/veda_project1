@@ -6,7 +6,7 @@
 #include <QJsonDocument>
 
 User::User() {}
-User::User(QJsonObject user_json)
+User::User(QJsonObject user_json, Client* client)
 {
     QJsonObject info = user_json["info"].toObject();
     this->name = info["name"].toString();
@@ -22,6 +22,8 @@ User::User(QJsonObject user_json)
     this->late = attendance["late"].toInt();
     this->early_leave = attendance["early_leave"].toInt();
     this->be_out = attendance["be_out"].toInt();
+
+    this->client = client;
 }
 
 User::~User()
@@ -114,45 +116,32 @@ int User::getBe_out() const
     return be_out;
 }
 
-bool User::withdraw()
+QJsonObject User::getUserJson()
 {
-    QFile file("user.json");
+    QJsonObject res;
 
-    if(!file.open(QIODevice::ReadOnly))
-    {
-        return false;
-    }
+    QJsonObject info = res["info"].toObject();
+    info["name"] = name;
+    info["birthday"] = birthday.toString();
+    info["password"] = password;
+    info["phone_num"] = phone_num;
+    info["age"] = age;
 
-    QByteArray data = file.readAll();
-    file.close();
+    QJsonObject attendance = res["attendance"].toObject();
+    attendance["present"] = present;
+    attendance["absent"] = absent;
+    attendance["late"] = late;
+    attendance["early_leave"] = early_leave;
+    attendance["be_out"] = be_out;
 
-    QJsonDocument doc = QJsonDocument::fromJson(data);
+    res["info"] = info;
+    res["attendance"] = attendance;
+    res["id"] = id;
 
-    if(!doc.isArray())
-    {
-        return false;
-    }
+    return res;
+}
 
-    QJsonArray arr = doc.array();
-
-    for(int i = 0 ; i < arr.size() ; i++)
-    {
-        QJsonObject obj = arr[i].toObject();
-
-        if(obj["id"] == id)
-        {
-            arr.removeAt(i);
-            break;
-        }
-    }
-
-    if(!file.open(QIODevice::WriteOnly))
-    {
-        return false;
-    }
-
-    file.write(QJsonDocument(arr).toJson(QJsonDocument::Indented));
-    file.close();
-
-    return true;
+void User::withdraw()
+{
+    client->sendWithdraw(this->id);
 }

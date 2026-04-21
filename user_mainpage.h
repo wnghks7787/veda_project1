@@ -24,7 +24,7 @@ public:
 private slots:
     void on_logout_button_clicked();
 
-    // void on_withdraw_button_clicked();
+    void on_withdraw_button_clicked();
 
 private:
     Ui::user_page *ui;
@@ -32,8 +32,6 @@ private:
     QString id;
     QMessageBox::StandardButton msg_box;
     User* user;
-
-    void withdraw();
 };
 
 #endif // USER_MAINPAGE_H
