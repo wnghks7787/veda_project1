@@ -20,8 +20,14 @@ public:
 private slots:
     void on_buttonBox_accepted();
 
+    void on_verify_id_button_clicked();
+
+    void on_id_edit_textChanged(const QString &arg1);
+
 private:
     Ui::sign_up_dialog* ui;
+
+    bool verified_id;
 };
 
 #endif // SIGN_UP_H
