@@ -6,11 +6,14 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-UserMainpage::UserMainpage(User* user, QWidget *parent)
+UserMainpage::UserMainpage(Client* client, User* user, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::user_page)
 {
     ui->setupUi(this);
+
+    this->client = client;
+    this->user = user;
 }
 
 UserMainpage::~UserMainpage() {
@@ -57,6 +60,15 @@ void UserMainpage::on_withdraw_button_clicked()
 
     if(msg_box == QMessageBox::Ok)
     {
-        user->withdraw();
+        QString id = user->getId();
+        client->sendWithdraw(id);
+
+        this->close();
+
+        Login* login = new Login();
+        login->setAttribute(Qt::WA_DeleteOnClose);
+        login->show();
+
+        delete(user);
     }
 }

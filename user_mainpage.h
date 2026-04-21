@@ -16,7 +16,7 @@ class UserMainpage : public QWidget
     Q_OBJECT
 
 public:
-    explicit UserMainpage(User* user, QWidget *parent = nullptr);
+    explicit UserMainpage(Client* client, User* user, QWidget *parent = nullptr);
     ~UserMainpage() override;
 
     void setId(QString &id);
@@ -32,6 +32,7 @@ private:
     QString id;
     QMessageBox::StandardButton msg_box;
     User* user;
+    Client* client;
 };
 
 #endif // USER_MAINPAGE_H

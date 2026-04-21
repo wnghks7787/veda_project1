@@ -10,7 +10,7 @@ class User
 {
 public:
     User();
-    User(QJsonObject user_json, Client* client);
+    User(QJsonObject user_json);
     ~User();
 
     QString getName() const;

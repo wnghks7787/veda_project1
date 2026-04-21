@@ -33,7 +33,7 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
     {
         qDebug() << "success";
 
-        User* user = new User(user_json, client);
+        User* user = new User(user_json);
 
         msg_box = QMessageBox::information(
             this,
@@ -41,7 +41,7 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
             QString("%1님 환영합니다.").arg(user->getName()),
             QMessageBox::Ok);
 
-        UserMainpage* user_page = new UserMainpage(user);
+        UserMainpage* user_page = new UserMainpage(client, user);
         user_page->setAttribute(Qt::WA_DeleteOnClose);
         user_page->show();
 

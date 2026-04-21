@@ -6,12 +6,12 @@
 #include <QJsonDocument>
 
 User::User() {}
-User::User(QJsonObject user_json, Client* client)
+User::User(QJsonObject user_json)
 {
     QJsonObject info = user_json["info"].toObject();
     this->name = info["name"].toString();
     this->birthday = QDate::fromString(info["birthday"].toString());
-    this->id = info["id"].toString();
+    this->id = user_json["id"].toString();
     this->password = info["password"].toString();
     this->phone_num = info["phone_num"].toString();
     this->age = info["age"].toInt();
@@ -22,8 +22,6 @@ User::User(QJsonObject user_json, Client* client)
     this->late = attendance["late"].toInt();
     this->early_leave = attendance["early_leave"].toInt();
     this->be_out = attendance["be_out"].toInt();
-
-    this->client = client;
 }
 
 User::~User()
@@ -139,9 +137,4 @@ QJsonObject User::getUserJson()
     res["id"] = id;
 
     return res;
-}
-
-void User::withdraw()
-{
-    client->sendWithdraw(this->id);
 }
