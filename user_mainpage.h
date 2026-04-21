@@ -2,6 +2,7 @@
 #define USER_MAINPAGE_H
 
 #include <QWidget>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,6 +23,8 @@ private slots:
 
 private:
     Ui::user_page *ui;
+
+    QMessageBox::StandardButton msg_box;
 };
 
 #endif // USER_MAINPAGE_H
