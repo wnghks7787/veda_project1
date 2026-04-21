@@ -21,6 +21,8 @@ private:
 
     void loginWithAdmin();
     void loginWithUser();
+
+    bool checkLoginValidate();
 };
 
 #endif // LOGIN_MODULE_H
