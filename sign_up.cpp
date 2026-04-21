@@ -8,12 +8,13 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include <QMessageBox>
+
 SignUp::SignUp(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::sign_up_dialog)
 {
     ui->setupUi(this);
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     verified_id = false;
 }
@@ -22,7 +23,7 @@ SignUp::~SignUp()
 {
     delete ui;
 }
-void SignUp::on_buttonBox_accepted()
+void SignUp::on_ok_button_clicked()
 {
     // 처리 로직
     SignUpModule sign_up_module(
@@ -36,14 +37,23 @@ void SignUp::on_buttonBox_accepted()
     if(sign_up_module.verifyPassword() && verified_id)
     {
         sign_up_module.createUser();
+        this->close();
     }
     else if(!verified_id)
     {
-        qDebug() << "중복 확인을 해야 합니다.";
+        reply = QMessageBox::critical(
+            this,
+            "회원가입 실패",
+            "중복 확인을 해야 합니다.",
+            QMessageBox::Ok);
     }
     else
     {
-        qDebug() << "로그인 실패";
+        reply = QMessageBox::critical(
+            this,
+            "회원가입 실패",
+            "비밀번호가 다릅니다.",
+            QMessageBox::Ok);
     }
 }
 
@@ -73,7 +83,11 @@ void SignUp::on_verify_id_button_clicked()
         {
             verified_id = false;
             id_check_ok = true;
-            qDebug() << "아이디 존재";
+            reply = QMessageBox::critical(
+                this,
+                "중복 검사",
+                "아이디가 이미 존재합니다.",
+                QMessageBox::Ok);
             break;
         }
     }
@@ -81,15 +95,24 @@ void SignUp::on_verify_id_button_clicked()
     if(!id_check_ok)
     {
         verified_id = true;
-        qDebug() << "사용 가능한 아이디입니다.";
-        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+
+        reply = QMessageBox::information(
+            this,
+            "중복 검사",
+            "사용 가능한 아이디입니다.",
+            QMessageBox::Ok);
     }
 }
 
 
 void SignUp::on_id_edit_textChanged(const QString &arg1)
 {
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     verified_id = false;
+}
+
+
+void SignUp::on_cancel_button_clicked()
+{
+    this->close();
 }
 
