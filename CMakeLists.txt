@@ -33,6 +33,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sign_up.h
         user.h user.cpp
         sign_up_module.h sign_up_module.cpp
+        client.h client.cpp
 
 
 
