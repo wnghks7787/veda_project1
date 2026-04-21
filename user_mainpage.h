@@ -2,6 +2,8 @@
 #define USER_MAINPAGE_H
 
 #include <QWidget>
+#include <QMessageBox>
+#include "user.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -14,14 +16,24 @@ class UserMainpage : public QWidget
     Q_OBJECT
 
 public:
-    explicit UserMainpage(QWidget *parent = nullptr);
+    explicit UserMainpage(QString id, QWidget *parent = nullptr);
     ~UserMainpage() override;
+
+    void setId(QString &id);
 
 private slots:
     void on_logout_button_clicked();
 
+    void on_withdraw_button_clicked();
+
 private:
     Ui::user_page *ui;
+
+    QString id;
+    QMessageBox::StandardButton msg_box;
+    User* user;
+
+    void withdraw();
 };
 
 #endif // USER_MAINPAGE_H
