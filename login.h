@@ -27,7 +27,7 @@ private slots:
 private:
     QMessageBox::StandardButton msg_box;
 
-    UserMainpage* user_page =  new UserMainpage();
+    UserMainpage* user_page;
     Ui::Widget *ui;
 };
 #endif // LOGIN_H

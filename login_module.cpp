@@ -95,7 +95,7 @@ void LoginModule::loginWithUser()
         QString("%1님 환영합니다.").arg(name),
         QMessageBox::Ok);
 
-    UserMainpage* user_page = new UserMainpage();
+    UserMainpage* user_page = new UserMainpage(id);
     user_page->setAttribute(Qt::WA_DeleteOnClose);
     user_page->show();
 }

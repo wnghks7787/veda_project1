@@ -8,6 +8,7 @@ class User
 {
 public:
     User();
+    User(QString id);
     ~User();
 
     QString getName() const;
@@ -23,11 +24,13 @@ public:
     int getAge() const;
     void setAge(int newAge);
 
-    int getAttendance() const;
+    int getPresent() const;
     int getAbsent() const;
     int getLate() const;
     int getEarly_leave() const;
     int getBe_out() const;
+
+    bool withdraw();
 
 private:
     QString name;
@@ -36,7 +39,7 @@ private:
     QString password;
     QString phone_num;
     int age;
-    int attendance;
+    int present;
     int absent;
     int late;
     int early_leave;

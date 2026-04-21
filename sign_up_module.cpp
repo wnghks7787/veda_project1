@@ -61,6 +61,7 @@ void SignUpModule::createUser()
 
     QJsonObject attendanceObj;
     attendanceObj["present"] = 0;
+    attendanceObj["absent"] = 0;
     attendanceObj["late"] = 0;
     attendanceObj["early_leave"] = 0;
     attendanceObj["be_out"] = 0;
