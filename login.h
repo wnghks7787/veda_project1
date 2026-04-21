@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMessageBox>
+#include <QJsonObject>
 #include "user_mainpage.h"
 #include "client.h"
 
@@ -24,7 +25,7 @@ private slots:
     void on_login_button_clicked();
 
     void on_sign_up_button_clicked();
-    void onLoginResult(bool success, QString msg);
+    void onLoginResult(bool success, QJsonObject user_json);
 
 private:
     QMessageBox::StandardButton msg_box;

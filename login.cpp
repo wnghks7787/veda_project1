@@ -12,7 +12,7 @@ Login::Login(QWidget *parent)
     client = new Client(this);
     client->connectToServer();
 
-    connect(client, SIGNAL(loginResult(bool, QString)), this, SLOT(onLoginResult(bool, QString)));
+    connect(client, SIGNAL(loginResult(bool, QJsonObject)), this, SLOT(onLoginResult(bool, QJsonObject)));
 }
 
 Login::~Login() {
@@ -27,11 +27,25 @@ void Login::on_login_button_clicked()
     client->sendLogin(id, pw);
 }
 
-void Login::onLoginResult(bool success, QString msg)
+void Login::onLoginResult(bool success, QJsonObject user_json)
 {
     if(success)
     {
         qDebug() << "success";
+
+        User* user = new User(user_json);
+
+        msg_box = QMessageBox::information(
+            this,
+            "로그인 성공",
+            QString("%1님 환영합니다.").arg(user->getName()),
+            QMessageBox::Ok);
+
+        UserMainpage* user_page = new UserMainpage(user);
+        user_page->setAttribute(Qt::WA_DeleteOnClose);
+        user_page->show();
+
+        this->close();
     }
     else
     {

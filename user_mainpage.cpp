@@ -6,13 +6,11 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-UserMainpage::UserMainpage(QString id, QWidget *parent)
+UserMainpage::UserMainpage(User* user, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::user_page)
 {
     ui->setupUi(this);
-
-    user = new User(id);
 }
 
 UserMainpage::~UserMainpage() {
@@ -42,32 +40,34 @@ void UserMainpage::on_logout_button_clicked()
         Login* login = new Login();
         login->setAttribute(Qt::WA_DeleteOnClose);
         login->show();
+
+        delete(user);
     }
 }
 
 
-void UserMainpage::on_withdraw_button_clicked()
-{
-    msg_box = QMessageBox::critical(
-        this,
-        "회원 탈퇴",
-        "회원 탈퇴를 하시겠습니까?\n(주의! 취소할 수 없습니다.",
-        QMessageBox::Ok|
-        QMessageBox::Cancel);
+// void UserMainpage::on_withdraw_button_clicked()
+// {
+//     msg_box = QMessageBox::critical(
+//         this,
+//         "회원 탈퇴",
+//         "회원 탈퇴를 하시겠습니까?\n(주의! 취소할 수 없습니다.",
+//         QMessageBox::Ok|
+//         QMessageBox::Cancel);
 
-    if(msg_box == QMessageBox::Ok)
-    {
-        if(user->withdraw())
-        {
-            this->close();
+//     if(msg_box == QMessageBox::Ok)
+//     {
+//         if(user->withdraw())
+//         {
+//             this->close();
 
-            Login* login = new Login();
-            login->setAttribute(Qt::WA_DeleteOnClose);
-            login->show();
-        }
-        else
-        {
-            qDebug() << "탈퇴 실패";
-        }
-    }
-}
+//             Login* login = new Login();
+//             login->setAttribute(Qt::WA_DeleteOnClose);
+//             login->show();
+//         }
+//         else
+//         {
+//             qDebug() << "탈퇴 실패";
+//         }
+//     }
+// }

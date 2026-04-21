@@ -8,7 +8,7 @@ class User
 {
 public:
     User();
-    User(QString id);
+    User(QJsonObject user_json);
     ~User();
 
     QString getName() const;

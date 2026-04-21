@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include <QObject>
+#include <QJsonObject>
 #include <QtNetwork/QTcpSocket>
 
 class Client : public QObject
@@ -15,7 +16,7 @@ public:
     void sendLogin(QString id, QString pw);
 
 signals:
-    void loginResult(bool success, QString msgs);
+    void loginResult(bool success, QJsonObject user);
     void connected();
     void disconnected();
 

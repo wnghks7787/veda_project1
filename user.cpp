@@ -6,51 +6,22 @@
 #include <QJsonDocument>
 
 User::User() {}
-User::User(QString id)
+User::User(QJsonObject user_json)
 {
-    QFile file("user.json");
-    QJsonArray users;
+    QJsonObject info = user_json["info"].toObject();
+    this->name = info["name"].toString();
+    this->birthday = QDate::fromString(info["birthday"].toString());
+    this->id = info["id"].toString();
+    this->password = info["password"].toString();
+    this->phone_num = info["phone_num"].toString();
+    this->age = info["age"].toInt();
 
-    if(file.exists() && file.open(QIODevice::ReadOnly))
-    {
-        QByteArray data = file.readAll();
-        file.close();
-
-        QJsonDocument doc = QJsonDocument::fromJson(data);
-
-        if(doc.isArray())
-        {
-            users = doc.array();
-        }
-    }
-    QJsonObject obj;
-
-    for(const QJsonValue &value : users)
-    {
-        QJsonObject json_user = value.toObject();
-
-        QString json_id = json_user["id"].toString();
-
-        if(id == json_id)
-        {
-            QJsonObject json_info = json_user["info"].toObject();
-            this->id = json_id;
-            this->name = json_info["name"].toString();
-            this->password = json_info["password"].toString();
-            this->birthday = QDate::fromString(json_user["birthday"].toString());
-            this->phone_num = json_info["phone_num"].toString();
-            this->age = json_info["age"].toInt();
-
-            QJsonObject json_attendance = json_user["attendance"].toObject();
-            this->present = json_attendance["present"].toInt();
-            this->absent = json_attendance["absent"].toInt();
-            this->late = json_attendance["late"].toInt();
-            this->early_leave = json_attendance["early_leave"].toInt();
-            this->be_out = json_attendance["be_out"].toInt();
-
-            break;
-        }
-    }
+    QJsonObject attendance = user_json["attendance"].toObject();
+    this->present = attendance["present"].toInt();
+    this->absent = attendance["absent"].toInt();
+    this->late = attendance["late"].toInt();
+    this->early_leave = attendance["early_leave"].toInt();
+    this->be_out = attendance["be_out"].toInt();
 }
 
 User::~User()

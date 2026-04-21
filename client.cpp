@@ -47,7 +47,6 @@ void Client::onDisconnected()
 void Client::onReadyRead()
 {
     QByteArray data = socket->readAll();
-    qDebug() << "서버 응답" << data;
 
     QJsonDocument doc = QJsonDocument::fromJson(data);
     QJsonObject obj = doc.object();
@@ -58,8 +57,7 @@ void Client::onReadyRead()
     {
         bool success = obj["success"].toBool();
         QJsonObject user = obj["user"].toObject();
-        QString msg = user["name"].toString();
 
-        emit loginResult(success, msg);
+        emit loginResult(success, user);
     }
 }
