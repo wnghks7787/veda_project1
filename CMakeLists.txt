@@ -28,8 +28,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         user_mainpage.ui
         user_mainpage.h
         user_mainpage.cpp
-        login_module.cpp
-        login_module.h
+
+
         sign_up.ui
         sign_up.cpp
         sign_up.h
