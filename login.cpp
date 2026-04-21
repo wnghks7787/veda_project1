@@ -3,6 +3,8 @@
 #include "login_module.h"
 #include "sign_up.h"
 
+#include <QMessageBox>
+
 Login::Login(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
@@ -25,16 +27,10 @@ void Login::on_login_button_clicked()
 
     if(success == -1)
     {
-        qDebug()<< "로그인 실패";
+        return;
     }
-    else if(success == 1)
+    else
     {
-        qDebug() << "관리자 로그인";
-        this->close();
-    }
-    else if(success == 2)
-    {
-        qDebug() << "유저 로그인";
         this->close();
     }
 }

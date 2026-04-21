@@ -2,6 +2,7 @@
 #define LOGIN_MODULE_H
 
 #include <QString>
+#include <QMessageBox>
 
 class LoginModule
 {
@@ -14,10 +15,13 @@ public:
     int login();
 
     QString getId();
+    QString getName();
 
 private:
     QString id;
     QString pw;
+    QString name;
+    QMessageBox::StandardButton msg_box;
 
     void loginWithAdmin();
     void loginWithUser();

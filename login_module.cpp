@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QMessageBox>
 
 #include "login_module.h"
 #include "user_mainpage.h"
@@ -66,16 +67,34 @@ int LoginModule::login()
     }
 
     // 로그인 실패
+    msg_box = QMessageBox::critical(
+        nullptr,
+        "로그인 실패",
+        "로그인에 실패하였습니다.\n아이디와 비밀번호를 확인하세요.",
+        QMessageBox::Ok);
+
     return -1;
 }
-
+/**
+ * @author Joohwan Lim
+ * @brief 관리자 로그인
+ */
 void LoginModule::loginWithAdmin()
 {
     qDebug() << "admin login";
 }
+/**
+ * @author Joohwan Lim
+ * @brief 유저 로그인
+ */
 void LoginModule::loginWithUser()
 {
-    qDebug() << "user login";
+    msg_box = QMessageBox::information(
+        nullptr,
+        "로그인 성공",
+        QString("%1님 환영합니다.").arg(name),
+        QMessageBox::Ok);
+
     UserMainpage* user_page = new UserMainpage();
     user_page->setAttribute(Qt::WA_DeleteOnClose);
     user_page->show();
@@ -84,6 +103,11 @@ void LoginModule::loginWithUser()
 QString LoginModule::getId()
 {
     return this->id;
+}
+
+QString LoginModule::getName()
+{
+    return this->name;
 }
 
 /**
@@ -114,6 +138,7 @@ bool LoginModule::checkLoginValidate()
 
         if(id == json_id && pw == json_pw)
         {
+            this->name = user["info"].toObject()["name"].toString();
             return true;
         }
     }

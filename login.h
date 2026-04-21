@@ -2,6 +2,7 @@
 #define LOGIN_H
 
 #include <QWidget>
+#include <QMessageBox>
 #include "user_mainpage.h"
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +25,8 @@ private slots:
     void on_sign_up_button_clicked();
 
 private:
+    QMessageBox::StandardButton msg_box;
+
     UserMainpage* user_page =  new UserMainpage();
     Ui::Widget *ui;
 };
