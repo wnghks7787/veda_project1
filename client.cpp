@@ -44,6 +44,30 @@ void Client::sendWithdraw(QString id)
     socket->write(doc.toJson());
 }
 
+void Client::sendVerifyId(QString id)
+{
+    QJsonObject obj;
+
+    obj["type"] = "verifyId";
+    obj["id"] = id;
+
+    QJsonDocument doc(obj);
+
+    socket->write(doc.toJson());
+}
+
+void Client::sendSignUp(QJsonObject user)
+{
+    QJsonObject obj;
+
+    obj["type"] = "signUp";
+    obj["user"] = user;
+
+    QJsonDocument doc(obj);
+
+    socket->write(doc.toJson());
+}
+
 void Client::onConnected()
 {
     qDebug() << "서버 연결됨";
@@ -71,5 +95,17 @@ void Client::onReadyRead()
         QJsonObject user = obj["user"].toObject();
 
         emit loginResult(success, user);
+    }
+    else if(type == "verifyId")
+    {
+        bool success = obj["success"].toBool();
+
+        emit verifiedResult(success);
+    }
+    else if(type == "signUp")
+    {
+        bool success = obj["success"].toBool();
+
+        emit signUpResult(success);
     }
 }

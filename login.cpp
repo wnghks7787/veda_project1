@@ -56,7 +56,7 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
 
 void Login::on_sign_up_button_clicked()
 {
-    SignUp* sign_up_page = new SignUp();
+    SignUp* sign_up_page = new SignUp(client);
     sign_up_page->setAttribute(Qt::WA_DeleteOnClose);
     sign_up_page->show();
 }
