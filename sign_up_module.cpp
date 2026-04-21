@@ -19,12 +19,8 @@ SignUpModule::SignUpModule(QString name, QDate birthday, QString id, QString pas
     this->birthday = birthday;
     this->id = id;
     this->password = password;
+    this->verify_password = verify_password;
     this->phone_num = phone_num;
-    // this->attendance = 0;
-    // this->absent = 0;
-    // this->late = 0;
-    // this->early_leave = 0;
-    // this->be_out = 0;
 }
 
 /**
@@ -52,15 +48,24 @@ void SignUpModule::createUser()
     // 사용자 추가
     QJsonObject obj;
     obj["id"]=  id;
-    obj["name"] = name;
-    obj["birthday"] = birthday.toString("yyyy-MM-dd");
-    obj["password"] = password;
-    obj["phone_num"] = phone_num;
-    obj["age"] = calculateAge();
-    obj["attendance"] = 0;
-    obj["late"] = 0;
-    obj["early_leave"] = 0;
-    obj["be_out"] = 0;
+
+    QJsonObject infoObj;
+    infoObj["name"] = name;
+    infoObj["birthday"] = birthday.toString("yyyy-MM-dd");
+    infoObj["password"] = password;
+    infoObj["phone_num"] = phone_num;
+    infoObj["age"] = calculateAge();
+
+    obj["info"] = infoObj;
+
+
+    QJsonObject attendanceObj;
+    attendanceObj["present"] = 0;
+    attendanceObj["late"] = 0;
+    attendanceObj["early_leave"] = 0;
+    attendanceObj["be_out"] = 0;
+
+    obj["attendance"] = attendanceObj;
 
     users.append(obj);
 
@@ -69,6 +74,18 @@ void SignUpModule::createUser()
     {
         file.write(QJsonDocument(users).toJson(QJsonDocument::Indented));
         file.close();
+    }
+}
+
+bool SignUpModule::verifyPassword()
+{
+    if(password == verify_password)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 

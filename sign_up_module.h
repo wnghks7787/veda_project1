@@ -19,12 +19,6 @@ private:
     QString password;
     QString verify_password;
     QString phone_num;
-    // int age;
-    // int attendance;
-    // int absent;
-    // int late;
-    // int early_leave;
-    // int be_out;
 
     int calculateAge();
 };
