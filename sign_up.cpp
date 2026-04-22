@@ -55,7 +55,7 @@ void SignUp::on_ok_button_clicked()
     // 성공 로직. 값을 보내줌
     QJsonObject user;
     user["name"] = ui->name_edit->text();
-    user["birthdya"] = ui->birthday_edit->text();
+    user["birthday"] = ui->birthday_edit->date().toString(Qt::ISODate);
     user["id"] = ui->id_edit->text();
     user["password"] = ui->pw_edit->text();
     user["phone_num"] = ui->phone_edit->text();

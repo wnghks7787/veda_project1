@@ -87,7 +87,7 @@ void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray u
             QMessageBox::Ok);
 
 
-        Adminwindow* admin_page = new Adminwindow();
+        Adminwindow* admin_page = new Adminwindow(users_info, client);
         admin_page->setAttribute(Qt::WA_DeleteOnClose);
         admin_page->show();
 
