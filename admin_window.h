@@ -1,7 +1,13 @@
+/**
+ * 관리자로 로그인했을 때 볼 수 있는 화면
+ * admin_window.ui를 통해 관리자 페이지 생성
+ * 로그인 시 받은 정보를 통해 전체 유저의 출결 현황과 정보를 조회/수정할 수 있음
+ * 새로운 사용자를 추가 / 기존 유저 삭제 가능
+ * 로그아웃은 가능하나 회원탈퇴는 불가능
+ * */
+
 #ifndef ADMIN_WINDOW_H
 #define ADMIN_WINDOW_H
-//#include "ui_adminwindow.h"
-#include "student_dialog.h"
 #include "client.h"
 #include <QWidget>
 #include <QStackedWidget>

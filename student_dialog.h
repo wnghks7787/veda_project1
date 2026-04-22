@@ -1,3 +1,9 @@
+/**
+ * 유저 수정 등에 사용되는 dialog
+ * 중복 검사 등을 할 수 있으며, 유저 정보 수정, 유저 추가 가능
+ * 수정된 결과는 서버에 저장
+ * */
+
 #ifndef STUDENT_DIALOG_H
 #define STUDENT_DIALOG_H
 #include <QDialog>
