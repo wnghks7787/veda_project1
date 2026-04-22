@@ -18,6 +18,9 @@ class user_page;
 }
 QT_END_NAMESPACE
 
+/**
+ * @brief 유저 메인윈도우 클래스
+ */
 class UserMainpage : public QWidget
 {
     Q_OBJECT
