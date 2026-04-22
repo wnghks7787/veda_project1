@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 
 User::User() {}
+// 생성 시 유저 정보를 저장
 User::User(QJsonObject user_json)
 {
     QJsonObject info = user_json["info"].toObject();
@@ -28,7 +29,8 @@ User::~User()
 {
 
 }
-
+//
+// 이하 getter setter
 QString User::getName() const
 {
     return name;

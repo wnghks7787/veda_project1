@@ -1,5 +1,6 @@
 #include "user_mainpage.h"
 #include "./ui_user_mainpage.h"
+
 #include "login.h"
 
 #include <QFile>
@@ -15,24 +16,21 @@ UserMainpage::UserMainpage(Client* client, User* user, QWidget *parent)
     this->client = client;
     this->user = user;
 
-    setWindowTitle("출결 확인 시스템");
-    resize(1100, 700);
+    setWindowTitle("출결 확인 시스템"); // 타이틀 지정
 
-    QWidget* sidebar = new QWidget();
-    sidebar->setStyleSheet("background-coolor: #2c3e50");
-    sidebar->setFixedWidth(200);
+    // 출결 현황 값 지정
+    int present = user->getPresent(); // 출석
+    int late = user->getLate(); // 지각
+    int early = user->getEarly_leave(); // 조퇴
+    int out = user->getBe_out(); // 외출
+    int abs = user->getAbsent(); // 결석
 
-    // Populate attendance data
-    int present = user->getPresent();
-    int late = user->getLate();
-    int early = user->getEarly_leave();
-    int out = user->getBe_out();
-    int abs = user->getAbsent();
-
+    // 지각/조퇴/외출 3회당 결석 1회
     int effective_absent = abs + (late + early + out) / 3;
     double absentRate = effective_absent;
     double attendanceRate = 100.0 - effective_absent;
 
+    // ui에 결과 출력
     ui->label_title->setText(QString("<h2>%1님의 출결 현황 (총 100일)</h2>").arg(user->getName()));
     ui->label_present->setText(QString("출석: %1회").arg(present));
     ui->label_late->setText(QString("지각: %1회").arg(late));
