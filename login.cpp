@@ -40,17 +40,17 @@ void Login::on_login_button_clicked()
 /**
  * @brief 로그인 성공 여부 받아오기
  * @param success 성공/실패 여부
- * @param user_json 유저 데이터. 실패 시, empty 객체 받아옴
+ * @param userJson 유저 데이터. 실패 시, empty 객체 받아옴
  */
-void Login::onLoginResult(bool success, QJsonObject user_json)
+void Login::onLoginResult(bool success, QJsonObject userJson)
 {
     if(success)
     {
         qDebug() << "success";
 
-        User* user = new User(user_json);
+        User* user = new User(userJson);
 
-        msg_box = QMessageBox::information(
+        msgBox = QMessageBox::information(
             this,
             "로그인 성공",
             QString("%1님 환영합니다.").arg(user->getName()),
@@ -81,20 +81,13 @@ void Login::onLoginResultAdmin(bool success, QJsonObject userJson, QJsonArray us
     {
         qDebug() << "success";
 
-        for(const QJsonValue &value : usersInfo)
-        {
-            QJsonObject user = value.toObject();
-            qDebug() << user["id"].toString();
-        }
-
         User* user = new User(userJson);
 
-        msg_box = QMessageBox::information(
+        msgBox = QMessageBox::information(
             this,
             "로그인 성공",
             QString("%1님 환영합니다.").arg(user->getName()),
             QMessageBox::Ok);
-
 
         Adminwindow* admin_page = new Adminwindow(usersInfo, client);
         admin_page->setAttribute(Qt::WA_DeleteOnClose);

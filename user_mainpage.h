@@ -14,7 +14,7 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class user_page;
+class UserWindow;
 }
 QT_END_NAMESPACE
 
@@ -36,7 +36,7 @@ private slots:
     void on_withdraw_button_clicked(); // 회원탈퇴 버튼 작동 슬롯
 
 private:
-    Ui::user_page *ui;
+    Ui::UserWindow *ui;
 
     QString id; // 로그인 한 유저의 아이디
     QMessageBox::StandardButton msgBox; // 메시지 박스

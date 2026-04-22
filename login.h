@@ -36,7 +36,7 @@ private slots:
     void onLoginResultAdmin(bool success, QJsonObject userJson, QJsonArray usersInfo); // 서버로부터 로그인 결과 수신(관리자)
 
 private:
-    QMessageBox::StandardButton msg_box; // 메시지 박스
+    QMessageBox::StandardButton msgBox; // 메시지 박스
 
     UserMainpage* userPage; // 유저 페이지
     Ui::Widget *ui;

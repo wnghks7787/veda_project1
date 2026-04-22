@@ -9,7 +9,7 @@
 
 UserMainpage::UserMainpage(Client* client, User* user, QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::user_page)
+    , ui(new Ui::UserWindow)
 {
     ui->setupUi(this);
 

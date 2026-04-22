@@ -14,11 +14,11 @@
 #include <QDialogButtonBox>
 #include <QFormLayout>
 
-Adminwindow::Adminwindow(QJsonArray users_info, Client *client, QWidget *parent) : QWidget(parent)
+Adminwindow::Adminwindow(QJsonArray usersInfo, Client *client, QWidget *parent) : QWidget(parent)
 {
     this->client = client;
     setupUI();
-    loadData(users_info);
+    loadData(usersInfo);
     setWindowTitle("관리자 모드"); // 윈도우 타이틀
     resize(1100, 700); // 윈도우 사이즈
 }
@@ -268,7 +268,7 @@ void Adminwindow::on_btnAdd_clicked()
             user["birthday"] = s.birth;
             user["id"] = s.id;
             user["password"] = s.pw;
-            user["phone_num"] = s.phone;
+            user["phoneNum"] = s.phone;
             client->sendSignUp(user);
         }
     }
@@ -402,7 +402,7 @@ QJsonObject Adminwindow::studentToJson(const Student& s)
     QJsonObject info;
     info["name"] = s.name;
     info["password"] = s.pw;
-    info["phone_num"] = s.phone;
+    info["phoneNum"] = s.phone;
     info["birthday"] = s.birth;
     
     // Calculate age (simple logic)
@@ -418,8 +418,8 @@ QJsonObject Adminwindow::studentToJson(const Student& s)
     QJsonObject attendance;
     attendance["present"] = s.attendance.present;
     attendance["late"] = s.attendance.late;
-    attendance["early_leave"] = s.attendance.early;
-    attendance["be_out"] = s.attendance.out;
+    attendance["earlyLeave"] = s.attendance.early;
+    attendance["beOut"] = s.attendance.out;
     attendance["absent"] = s.attendance.abs;
     
     obj["attendance"] = attendance;
@@ -523,15 +523,15 @@ void Adminwindow::loadData(const QJsonArray &array)
         QJsonObject info = obj["info"].toObject();
         s.pw = info["password"].toString();
         s.name = info["name"].toString();
-        s.phone = info["phone_num"].toString();
+        s.phone = info["phoneNum"].toString();
         s.birth = info["birthday"].toString();
         s.note = obj["note"].toString(); // Assuming note might be at root or empty
 
         QJsonObject attendance = obj["attendance"].toObject();
         s.attendance.present = attendance["present"].toInt();
         s.attendance.late = attendance["late"].toInt();
-        s.attendance.early = attendance["early_leave"].toInt();
-        s.attendance.out = attendance["be_out"].toInt();
+        s.attendance.early = attendance["earlyLeave"].toInt();
+        s.attendance.out = attendance["beOut"].toInt();
         s.attendance.abs = attendance["absent"].toInt();
         
         // Calculate completedDays if not explicitly provided

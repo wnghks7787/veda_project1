@@ -14,7 +14,7 @@ class User
 {
 public:
     User();
-    User(QJsonObject user_json);
+    User(QJsonObject userJson);
     ~User();
 
     // 각각 필요한 getter() / setter()들

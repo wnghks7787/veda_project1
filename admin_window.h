@@ -65,7 +65,7 @@ class Adminwindow : public QWidget
 
 public:
     // 생성자: UI 초기화 및 데이터 로드 수행
-    Adminwindow(QJsonArray users_info, Client *client, QWidget *parent = nullptr);
+    Adminwindow(QJsonArray usersInfo, Client *client, QWidget *parent = nullptr);
 
 private slots:
     void on_btnAdd_clicked(); // 학생 추가 버튼 슬롯
@@ -82,7 +82,7 @@ private:
     QWidget* createAttendanceStatusPage(); // 출결 상태 확인 페이지를 생성하는 함수
 
     void saveData(); // 현재의 studentDatabase 메모리 데이터를 JSON 파일로 저장하는 함수
-    void loadData(const QJsonArray &users_info); // 서버로부터 받은 데이터를 studentDatabase에 로드하는 함수
+    void loadData(const QJsonArray &array); // 서버로부터 받은 데이터를 studentDatabase에 로드하는 함수
     void refreshStudentTable(); // studentDatabase의 정보를 바탕으로 학생 관리 테이블을 갱신하는 함수
     void refreshAttendanceTable(); // studentDatabase의 정보를 바탕으로 출결 현황 테이블을 갱신하는 함수
     QJsonObject studentToJson(const Student& s); // Student 구조체를 QJsonObject 포맷(서버 통신용)으로 변환하는 함수
