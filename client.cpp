@@ -91,6 +91,22 @@ void Client::sendSignUp(QJsonObject user)
 }
 
 /**
+ * @brief 유저 정보 수정을 서버에 요청
+ * @param user
+ */
+void Client::sendEditUser(QJsonObject user)
+{
+    QJsonObject obj;
+
+    obj["type"] = "editUser";
+    obj["user"] = user;
+
+    QJsonDocument doc(obj);
+
+    socket->write(doc.toJson());
+}
+
+/**
  * @brief 서버 연결
  */
 void Client::onConnected()
@@ -147,5 +163,11 @@ void Client::onReadyRead()
         bool success = obj["success"].toBool();
 
         emit signUpResult(success);
+    }
+    else if(type == "editUser")
+    {
+        bool success = obj["success"].toBool();
+
+        emit editUserResult(success);
     }
 }

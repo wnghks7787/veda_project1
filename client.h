@@ -17,12 +17,14 @@ public:
     void sendWithdraw(QString id);
     void sendVerifyId(QString id);
     void sendSignUp(QJsonObject user);
+    void sendEditUser(QJsonObject user);
 
 signals:
     void loginResult(bool success, QJsonObject user);
     void loginResultAdmin(bool success, QJsonObject user, QJsonArray users);
     void verifiedResult(bool success);
     void signUpResult(bool success);
+    void editUserResult(bool success);
     void connected();
     void disconnected();
 

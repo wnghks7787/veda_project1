@@ -2,6 +2,7 @@
 #define ADMIN_WINDOW_H
 //#include "ui_adminwindow.h"
 #include "student_dialog.h"
+#include "client.h"
 #include <QWidget>
 #include <QStackedWidget>
 #include <QTableWidget>
@@ -58,7 +59,7 @@ class Adminwindow : public QWidget
 
 public:
     // 생성자: UI 초기화 및 데이터 로드 수행
-    Adminwindow(QWidget *parent = nullptr);
+    Adminwindow(QJsonArray users_info, Client *client, QWidget *parent = nullptr);
 
 private slots:
     // 학생 추가 버튼 클릭 시 호출되는 슬롯
@@ -89,14 +90,17 @@ private:
     // 현재의 studentDatabase 메모리 데이터를 JSON 파일로 저장하는 함수
     void saveData();
 
-    // JSON 파일로부터 데이터를 읽어와 studentDatabase에 로드하는 함수
-    void loadData();
+    // 서버로부터 받은 데이터를 studentDatabase에 로드하는 함수
+    void loadData(const QJsonArray &users_info);
 
     // studentDatabase의 정보를 바탕으로 학생 관리 테이블을 갱신하는 함수
     void refreshStudentTable();
 
     // studentDatabase의 정보를 바탕으로 출결 현황 테이블을 갱신하는 함수
     void refreshAttendanceTable();
+
+    // Student 구조체를 QJsonObject 포맷(서버 통신용)으로 변환하는 함수
+    QJsonObject studentToJson(const Student& s);
 
     // 테이블 내의 데이터를 검색 조건(콤보박스, 입력창)에 따라 필터링하는 공통 함수
     void filterTable(QTableWidget *table, QComboBox *combo, QLineEdit *edit);
@@ -109,6 +113,8 @@ private:
     QTableWidget *attendanceTable;   // 출결 정보 표시 테이블
     QLineEdit *searchEdit;           // 검색어 입력창
     QComboBox *searchOpt;            // 검색 옵션 선택창
+    
+    Client *client;                  // 서버 통신용 클라이언트 객체
 
 signals:
     // 로그아웃이 요청되었을 때(예: 로그아웃 버튼 클릭) 발생하는 시그널

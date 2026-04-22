@@ -6,10 +6,11 @@
 #include <QJsonArray>
 #include <QFile>
 
-Adminwindow::Adminwindow(QWidget *parent) : QWidget(parent)
+Adminwindow::Adminwindow(QJsonArray users_info, Client *client, QWidget *parent) : QWidget(parent)
 {
+    this->client = client;
     setupUI();
-    loadData();
+    loadData(users_info);
     setWindowTitle("관리자 모드");
     resize(1100, 700);
 }
@@ -35,7 +36,7 @@ void Adminwindow::setupUI()
         btn->setStyleSheet("color: white; background: transparent; text-align: left; padding: 15px; border: none;");
         sidebarLayout->addWidget(btn);
 
-        // 1. 페이지 생성 및 추가 (기존 로직 유지)
+        // 1. 페이지 생성 및 추가
         if (i == 0)
         {
             stackedWidget->addWidget(createStudentPage());
@@ -49,7 +50,7 @@ void Adminwindow::setupUI()
             stackedWidget->addWidget(new QLabel(menus[i] + " 페이지", this));
         }
 
-        // 2. 통합된 버튼 클릭 연결 (하나만 남김)
+        // 2. 통합된 버튼 클릭 연결
         connect(btn, &QPushButton::clicked, [this, i]()
                 {
                     if (i == 2) // 프로그램 종료 버튼 (인덱스 2)
@@ -108,13 +109,15 @@ QWidget* Adminwindow::createStudentPage()
     studentTable = new QTableWidget(0, 6);
     studentTable->setHorizontalHeaderLabels({"이름", "전화번호", "생년월일", "ID", "Password", "비고"});
 
-    // [수정] 아래 코드를 추가하여 편집 기능을 완전히 막습니다.
+    //
+    // 아래 코드를 추가하여 편집 기능을 봉쇄. 추후 오픈 예정
     studentTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    //
 
     // 이벤트 필터 설치
     studentTable->viewport()->installEventFilter(this);
 
-    // [시각적 개선] 선택 행 하이라이트 및 스타일 설정
+    // 선택 행 하이라이트 및 스타일 설정
     studentTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     studentTable->setSelectionMode(QAbstractItemView::SingleSelection);
     studentTable->setStyleSheet(
@@ -145,10 +148,10 @@ QWidget* Adminwindow::createAttendanceStatusPage()
     QWidget *page = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(page);
 
-    // 1. 조회 툴바 추가
+    // 조회 툴바 추가
     QHBoxLayout *searchLayout = new QHBoxLayout();
 
-    // [추가] 검색 옵션 콤보박스
+    // 검색 옵션 콤보박스
     QComboBox *attSearchOpt = new QComboBox();
     attSearchOpt->addItems({"이름", "ID", "전화번호"}); // 검색 옵션 설정
 
@@ -163,20 +166,20 @@ QWidget* Adminwindow::createAttendanceStatusPage()
     searchLayout->addStretch();
     layout->addLayout(searchLayout);
 
-    // 2. 테이블 구성
+    // 테이블 구성
     attendanceTable = new QTableWidget(0, 11);
     // 각 컬럼 헤더 설정: 학생명, 전화번호, ID, 진도(진행일수/전체일수), 출석, 지각, 조퇴, 외출, 결석, 출석률, 진행률
     attendanceTable->setHorizontalHeaderLabels({"학생명", "전화번호", "ID", "진도/전체", "출석", "지각", "조퇴", "외출", "결석", "출석률", "진행률"});
     attendanceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // [설정] 기존 스타일 유지
+    // 기존 스타일 유지
     attendanceTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     attendanceTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     attendanceTable->setSelectionMode(QAbstractItemView::SingleSelection);
 
     layout->addWidget(attendanceTable);
 
-    // 4. 조회 기능 연결 (공통 검색 함수 사용)
+    // 조회 기능 연결 (공통 검색 함수 사용)
     connect(btnSearch, &QPushButton::clicked, [this, attSearchOpt, attSearchEdit]()
             {
                 filterTable(attendanceTable, attSearchOpt, attSearchEdit);
@@ -268,7 +271,46 @@ void Adminwindow::on_btnEdit_clicked()
 
         refreshStudentTable();
         refreshAttendanceTable();
+        
+        // 서버로 수정 내역 전송
+        if (client) {
+            client->sendEditUser(studentToJson(studentDatabase[id]));
+        }
     }
+}
+
+QJsonObject Adminwindow::studentToJson(const Student& s)
+{
+    QJsonObject obj;
+    obj["id"] = s.id;
+    obj["note"] = s.note;
+    
+    QJsonObject info;
+    info["name"] = s.name;
+    info["password"] = s.pw;
+    info["phone_num"] = s.phone;
+    info["birthday"] = s.birth;
+    
+    // Calculate age (simple logic)
+    QDate birthDate = QDate::fromString(s.birth, Qt::ISODate);
+    if(birthDate.isValid()) {
+        info["age"] = QDate::currentDate().year() - birthDate.year() + 1;
+    } else {
+        info["age"] = 0;
+    }
+    
+    obj["info"] = info;
+    
+    QJsonObject attendance;
+    attendance["present"] = s.attendance.present;
+    attendance["late"] = s.attendance.late;
+    attendance["early_leave"] = s.attendance.early;
+    attendance["be_out"] = s.attendance.out;
+    attendance["absent"] = s.attendance.abs;
+    
+    obj["attendance"] = attendance;
+    
+    return obj;
 }
 
 //데이터 저장
@@ -341,53 +383,40 @@ void Adminwindow::saveData()
 /*
  * 설명: 저장된 JSON 파일에서 데이터를 읽어와 메모리(studentDatabase)에 적재하고 테이블 갱신
  */
-void Adminwindow::loadData()
+void Adminwindow::loadData(const QJsonArray &array)
 {
-    qDebug() << "load..json";
+    qDebug() << "load data from server";
     studentDatabase.clear();
-
-    QFile file("students.json");
-    if (!file.exists() || !file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << "There is no json named students.json";
-        return;
-    }
-
-    QByteArray data = file.readAll();
-    file.close();
-
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    QJsonObject root = doc.object();
-    QJsonArray array;
-
-    // 하위 호환성 (기존 students.json 배열 형태 지원)
-    if (doc.isArray())
-    {
-        array = doc.array();
-    }
-    else
-    {
-        array = root["students"].toArray();
-    }
 
     for (const QJsonValue &value : std::as_const(array))
     {
         QJsonObject obj = value.toObject();
         Student s;
         s.id = obj["id"].toString();
-        s.pw = obj["pw"].toString();
-        s.name = obj["name"].toString();
-        s.phone = obj["phone"].toString();
-        s.birth = obj["birth"].toString();
-        s.note = obj["note"].toString();
+        
+        QJsonObject info = obj["info"].toObject();
+        s.pw = info["password"].toString();
+        s.name = info["name"].toString();
+        s.phone = info["phone_num"].toString();
+        s.birth = info["birthday"].toString();
+        s.note = obj["note"].toString(); // Assuming note might be at root or empty
 
-        if (obj.contains("attendance_summary"))
+        QJsonObject attendance = obj["attendance"].toObject();
+        s.attendance.present = attendance["present"].toInt();
+        s.attendance.late = attendance["late"].toInt();
+        s.attendance.early = attendance["early_leave"].toInt();
+        s.attendance.out = attendance["be_out"].toInt();
+        s.attendance.abs = attendance["absent"].toInt();
+        
+        // Calculate completedDays if not explicitly provided
+        s.attendance.completedDays = s.attendance.present + s.attendance.late + 
+                                     s.attendance.early + s.attendance.out + s.attendance.abs;
+        if(s.attendance.completedDays == 0 && obj.contains("attendance_summary"))
         {
             QJsonObject attObj = obj["attendance_summary"].toObject();
             s.attendance.totalDays = attObj["totalDays"].toInt(100);
             s.attendance.completedDays = attObj["completedDays"].toInt(0);
             s.attendance.present = attObj["present"].toInt(0);
-            s.attendance.late = attObj["late"].toInt(0);
             s.attendance.early = attObj["early"].toInt(0);
             s.attendance.out = attObj["out"].toInt(0);
             s.attendance.abs = attObj["abs"].toInt(0);
