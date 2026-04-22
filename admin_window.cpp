@@ -1,10 +1,14 @@
 #include "admin_window.h"
-#include <QHeaderView>
-#include <QMouseEvent>
+
+#include "student_dialog.h"
+
+#include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QFile>
+
+#include <QHeaderView>
+#include <QMouseEvent>
 #include <QSpinBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -15,8 +19,8 @@ Adminwindow::Adminwindow(QJsonArray users_info, Client *client, QWidget *parent)
     this->client = client;
     setupUI();
     loadData(users_info);
-    setWindowTitle("관리자 모드");
-    resize(1100, 700);
+    setWindowTitle("관리자 모드"); // 윈도우 타이틀
+    resize(1100, 700); // 윈도우 사이즈
 }
 
 // UI 설정
@@ -26,22 +30,23 @@ void Adminwindow::setupUI()
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
-    // 1. 사이드바
+    // 사이드바
     QWidget *sidebar = new QWidget();
-    sidebar->setStyleSheet("background-color: #2c3e50;");
+    sidebar->setStyleSheet("background-color: #2c3e50;"); // 색상 설정
     sidebar->setFixedWidth(200);
     QVBoxLayout *sidebarLayout = new QVBoxLayout(sidebar);
 
     QStringList menus = {"학생 정보 관리", "학생 출결 정보 관리", "프로그램 종료"};
     stackedWidget = new QStackedWidget();
 
+    // 메뉴별 설정
     for (int i = 0; i < menus.size(); ++i)
     {
         QPushButton *btn = new QPushButton(menus[i]);
         btn->setStyleSheet("color: white; background: transparent; text-align: left; padding: 15px; border: none;");
         sidebarLayout->addWidget(btn);
 
-        // 1. 페이지 생성 및 추가
+        // 페이지 생성 및 추가
         if (i == 0)
         {
             stackedWidget->addWidget(createStudentPage());
@@ -55,7 +60,7 @@ void Adminwindow::setupUI()
             stackedWidget->addWidget(new QLabel(menus[i] + " 페이지", this));
         }
 
-        // 2. 통합된 버튼 클릭 연결
+        // 통합된 버튼 클릭 연결
         connect(btn, &QPushButton::clicked, [this, i]()
                 {
                     if (i == 2) // 프로그램 종료 버튼 (인덱스 2)
@@ -81,7 +86,10 @@ void Adminwindow::setupUI()
     mainLayout->addWidget(stackedWidget);
 }
 
-//학생 정보 관리 페이지
+/**
+ * @brief 학생정보 관리페이지
+ * @return
+ */
 QWidget* Adminwindow::createStudentPage()
 {
     QWidget *page = new QWidget();
@@ -93,6 +101,7 @@ QWidget* Adminwindow::createStudentPage()
     searchEdit = new QLineEdit();
     QPushButton *btnSearch = new QPushButton("조회");
 
+    // 위젯 추가
     actionToolbar->addWidget(searchOpt);
     actionToolbar->addWidget(searchEdit);
     actionToolbar->addWidget(btnSearch);
@@ -103,6 +112,7 @@ QWidget* Adminwindow::createStudentPage()
     QPushButton *btnDelete = new QPushButton("삭제");
     QPushButton *btnSave = new QPushButton("저장");
 
+    // 위젯 추가
     actionToolbar->addWidget(btnAdd);
     actionToolbar->addWidget(btnEdit);
     actionToolbar->addWidget(btnDelete);
@@ -182,7 +192,7 @@ QWidget* Adminwindow::createAttendanceStatusPage()
 
     layout->addWidget(attendanceTable);
 
-    // 조회 기능 연결 (공통 검색 함수 사용)
+    // 조회 기능 연결 (검색 함수 사용)
     connect(btnSearch, &QPushButton::clicked, [this, attSearchOpt, attSearchEdit]()
             {
                 filterTable(attendanceTable, attSearchOpt, attSearchEdit);
@@ -211,19 +221,23 @@ bool Adminwindow::eventFilter(QObject *obj, QEvent *event)
     return QWidget::eventFilter(obj, event);
 }
 
-// --- 아래는 모든 슬롯 함수 구현입니다 (adminwindow 클래스 소속) ---
-// 1. 조회 기능 (선택된 옵션과 검색어에 따라 테이블 필터링)
+// 슬롯 함수들
+/**
+ * @brief 조회 기능 (선택된 옵션과 검색어에 따라 테이블 필터링)
+ */
 void Adminwindow::on_btnSearch_clicked()
 {
     filterTable(studentTable, searchOpt, searchEdit);
 }
 
-// 2. 추가 기능 (행 추가)
+/**
+ * @brief  추가 기능 (행 추가)
+ */
 void Adminwindow::on_btnAdd_clicked()
 {
     QStringList existingIds = studentDatabase.keys();
 
-    // 2. 수집된 목록을 다이얼로그로 전달
+    // 수집된 목록을 다이얼로그로 전달
     studentdialog dialog(existingIds, this);
 
     if (dialog.exec() == QDialog::Accepted)
@@ -254,7 +268,9 @@ void Adminwindow::on_btnAdd_clicked()
     }
 }
 
-//데이터 수정
+/**
+ * @brief 데이터 수정
+ */
 void Adminwindow::on_btnEdit_clicked()
 {
     int row = studentTable->currentRow();
@@ -294,7 +310,9 @@ void Adminwindow::on_btnEdit_clicked()
     }
 }
 
-// 출결 정보 수정
+/**
+ * @brief 출결 정보 수정
+ */
 void Adminwindow::on_btnAttEdit_clicked()
 {
     int row = attendanceTable->currentRow();
@@ -364,6 +382,11 @@ void Adminwindow::on_btnAttEdit_clicked()
     }
 }
 
+/**
+ * @brief 학생 정보를 Json 형식으로 변환
+ * @param s 학생 정보
+ * @return
+ */
 QJsonObject Adminwindow::studentToJson(const Student& s)
 {
     QJsonObject obj;
@@ -398,14 +421,18 @@ QJsonObject Adminwindow::studentToJson(const Student& s)
     return obj;
 }
 
-//데이터 저장
+/**
+ * @brief 데이터 저장
+ */
 void Adminwindow::on_btnSave_clicked()
 {
     saveData();
     QMessageBox::information(this, "알림", "모든 데이터가 저장되었습니다.");
 }
 
-// 4. 삭제 기능 (선택된 행 삭제)
+/**
+ * @brief 삭제 기능 (선택된 행 삭제)
+ */
 void Adminwindow::on_btnDelete_clicked()
 {
     int row = studentTable->currentRow();
@@ -428,6 +455,9 @@ void Adminwindow::on_btnDelete_clicked()
     }
 }
 
+/**
+ * @brief 정보 저장
+ */
 void Adminwindow::saveData()
 {
     qDebug() << "save Data in json...";
@@ -469,8 +499,9 @@ void Adminwindow::saveData()
     }
 }
 
-/*
- * 설명: 저장된 JSON 파일에서 데이터를 읽어와 메모리(studentDatabase)에 적재하고 테이블 갱신
+/**
+ * @brief 저장된 JSON 파일에서 데이터를 읽어와 메모리(studentDatabase)에 적재하고 테이블 갱신
+ * @param array
  */
 void Adminwindow::loadData(const QJsonArray &array)
 {
@@ -518,6 +549,9 @@ void Adminwindow::loadData(const QJsonArray &array)
     refreshAttendanceTable();
 }
 
+/**
+ * @brief 학생 정보 테이블 재조회(데이터 수정 등에 의한 변경 시)
+ */
 void Adminwindow::refreshStudentTable()
 {
     if (!studentTable)
@@ -551,6 +585,9 @@ void Adminwindow::refreshStudentTable()
     }
 }
 
+/**
+ * @brief 출결 관리 정보 페이지 재조회(정보 수정 등에 의한 변경 시)
+ */
 void Adminwindow::refreshAttendanceTable()
 {
     if (!attendanceTable)
@@ -594,7 +631,12 @@ void Adminwindow::refreshAttendanceTable()
     }
 }
 
-// 공통 검색 헬퍼 함수
+/**
+ * @brief 공통 검색 헬퍼 함수
+ * @param table
+ * @param combo
+ * @param edit
+ */
 void Adminwindow::filterTable(QTableWidget *table, QComboBox *combo, QLineEdit *edit)
 {
     QString option = combo->currentText();
