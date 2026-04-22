@@ -18,6 +18,10 @@ Login::Login(QWidget *parent)
 Login::~Login() {
     delete ui;
 }
+
+/**
+ * @brief 로그인 버튼 선택 시
+ */
 void Login::on_login_button_clicked()
 {
     QString id, pw;
@@ -27,6 +31,11 @@ void Login::on_login_button_clicked()
     client->sendLogin(id, pw);
 }
 
+/**
+ * @brief 로그인 성공 여부 받아오기
+ * @param success 성공/실패 여부
+ * @param user_json 유저 데이터. 실패 시, empty 객체 받아옴
+ */
 void Login::onLoginResult(bool success, QJsonObject user_json)
 {
     if(success)
@@ -62,7 +71,9 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
     }
 }
 
-
+/**
+ * @brief 회원가입 버튼 선택 시
+ */
 void Login::on_sign_up_button_clicked()
 {
     SignUp* sign_up_page = new SignUp(client);

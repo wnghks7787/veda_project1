@@ -25,6 +25,10 @@ SignUp::~SignUp()
 {
     delete ui;
 }
+
+/**
+ * @brief 회원가입 버튼
+ */
 void SignUp::on_ok_button_clicked()
 {
     // 실패 로직
@@ -48,7 +52,7 @@ void SignUp::on_ok_button_clicked()
     }
 
 
-    // 성공 로직
+    // 성공 로직. 값을 보내줌
     QJsonObject user;
     user["name"] = ui->name_edit->text();
     user["birthdya"] = ui->birthday_edit->text();
@@ -59,7 +63,9 @@ void SignUp::on_ok_button_clicked()
     client->sendSignUp(user);
 }
 
-
+/**
+ * @brief 아이디 중복 확인 버튼 선택
+ */
 void SignUp::on_verify_id_button_clicked()
 {
     QString id;
@@ -68,6 +74,10 @@ void SignUp::on_verify_id_button_clicked()
     client->sendVerifyId(id);
 }
 
+/**
+ * @brief 아이디 중복 확인 시 결과 받아오기
+ * @param success 사용 가능하면 true
+ */
 void SignUp::onVerifiedResult(bool success)
 {
     if(success)
@@ -90,6 +100,10 @@ void SignUp::onVerifiedResult(bool success)
     }
 }
 
+/**
+ * @brief 회원가입 시 결과 받아오기
+ * @param success 회원 가입이 완료되면 true
+ */
 void SignUp::onSignUpResult(bool success)
 {
     qDebug() << success;
@@ -104,6 +118,10 @@ void SignUp::onSignUpResult(bool success)
     this->close();
 }
 
+/**
+ * @brief id 칸에 글씨를 바꾸었을 때, 중복검사를 다시 하도록 하는 시그널
+ * @param arg1
+ */
 void SignUp::on_id_edit_textChanged(const QString &arg1)
 {
     verified_id = false;

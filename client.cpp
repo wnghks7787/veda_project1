@@ -14,11 +14,21 @@ Client::Client(QObject *parent)
     connect(socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 }
 
+/**
+ * @brief 서버와 연결하는 로직. host port는 서버에 맞춰 변경 필요
+ * @param host 127.0.0.1
+ * @param port 12345
+ */
 void Client::connectToServer(QString host, int port)
 {
     socket->connectToHost(host, port);
 }
 
+/**
+ * @brief 로그인을 보내는 로직
+ * @param id
+ * @param pw
+ */
 void Client::sendLogin(QString id, QString pw)
 {
     QJsonObject obj;
@@ -32,6 +42,10 @@ void Client::sendLogin(QString id, QString pw)
     socket->write(doc.toJson());
 }
 
+/**
+ * @brief 회원탈퇴 보내는 부분
+ * @param id
+ */
 void Client::sendWithdraw(QString id)
 {
     QJsonObject obj;
@@ -44,6 +58,10 @@ void Client::sendWithdraw(QString id)
     socket->write(doc.toJson());
 }
 
+/**
+ * @brief 아이디 중복 확인 보내는 부분
+ * @param id
+ */
 void Client::sendVerifyId(QString id)
 {
     QJsonObject obj;
@@ -56,6 +74,10 @@ void Client::sendVerifyId(QString id)
     socket->write(doc.toJson());
 }
 
+/**
+ * @brief 회원가입 하는 부분. user는 입력된 user정보를 보내줌
+ * @param user
+ */
 void Client::sendSignUp(QJsonObject user)
 {
     QJsonObject obj;
@@ -68,18 +90,28 @@ void Client::sendSignUp(QJsonObject user)
     socket->write(doc.toJson());
 }
 
+/**
+ * @brief 서버 연결
+ */
 void Client::onConnected()
 {
     qDebug() << "서버 연결됨";
     emit connected();
 }
 
+/**
+ * @brief 서버 연결 유실
+ */
 void Client::onDisconnected()
 {
     qDebug() << "서버 연결 끊김";
     emit disconnected();
 }
 
+/**
+ * @brief 값을 받는 부분. 상황에 따라 처리 로직이 다름. \
+ * 예를 들어, type이 login이면 로그인을, verifyId면 아이디 중복체크를 하는 식
+ */
 void Client::onReadyRead()
 {
     QByteArray data = socket->readAll();
