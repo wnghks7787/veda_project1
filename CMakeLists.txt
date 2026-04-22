@@ -38,8 +38,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         client.h client.cpp
 
         admin_window.ui admin_window.h admin_window.cpp
-        addstudentdialog.ui addstudentdialog.h addstudentdialog.cpp
-        makejson.cpp
+
+
         student_dialog.h
         student_dialog.cpp
 
