@@ -1,10 +1,6 @@
-/*
-json 모듈화 해야함
- */
 #include "admin_window.h"
 #include <QHeaderView>
 #include <QMouseEvent>
-//json
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -17,10 +13,11 @@ Adminwindow::Adminwindow(QWidget *parent) : QWidget(parent)
     setWindowTitle("관리자 모드");
     resize(1100, 700);
 }
+
 void Adminwindow::setupUI()
 {
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
-    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
     // 1. 사이드바
@@ -32,18 +29,18 @@ void Adminwindow::setupUI()
     QStringList menus = {"학생 정보 관리", "학생 출결 정보 관리", "프로그램 종료"};
     stackedWidget = new QStackedWidget();
 
-    for(int i=0; i<menus.size(); ++i)
+    for (int i = 0; i < menus.size(); ++i)
     {
         QPushButton *btn = new QPushButton(menus[i]);
         btn->setStyleSheet("color: white; background: transparent; text-align: left; padding: 15px; border: none;");
         sidebarLayout->addWidget(btn);
 
         // 1. 페이지 생성 및 추가 (기존 로직 유지)
-        if(i == 0)
+        if (i == 0)
         {
             stackedWidget->addWidget(createStudentPage());
         }
-        else if(i == 1)
+        else if (i == 1)
         {
             stackedWidget->addWidget(createAttendanceStatusPage());
         }
@@ -54,28 +51,30 @@ void Adminwindow::setupUI()
 
         // 2. 통합된 버튼 클릭 연결 (하나만 남김)
         connect(btn, &QPushButton::clicked, [this, i]()
-                {
-                    if (i == 2) // 프로그램 종료 버튼 (인덱스 2)
-                    {
-                        QMessageBox::StandardButton reply;
-                        reply = QMessageBox::question(this, "프로그램 종료 확인", "프로그램을 종료 하시겠습니까?",
-                                                      QMessageBox::Yes | QMessageBox::No);
+        {
+            if (i == 2) // 프로그램 종료 버튼 (인덱스 2)
+            {
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(this, "프로그램 종료 확인", "프로그램을 종료 하시겠습니까?",
+                                              QMessageBox::Yes | QMessageBox::No);
 
-                        if (reply == QMessageBox::Yes) {
-                            emit logoutRequested(); // 신호 발생
-                            this->close();          // 현재 창 닫기
-                        }
-                    }
-                    else
-                    {
-                        stackedWidget->setCurrentIndex(i);
-                    }
-                });
+                if (reply == QMessageBox::Yes)
+                {
+                    emit logoutRequested(); // 신호 발생
+                    this->close();          // 현재 창 닫기
+                }
+            }
+            else
+            {
+                stackedWidget->setCurrentIndex(i);
+            }
+        });
     }
     sidebarLayout->addStretch();
     mainLayout->addWidget(sidebar);
     mainLayout->addWidget(stackedWidget);
 }
+
 //학생 정보 관리 페이지
 QWidget* Adminwindow::createStudentPage()
 {
@@ -96,7 +95,7 @@ QWidget* Adminwindow::createStudentPage()
     QPushButton *btnAdd = new QPushButton("추가");
     QPushButton *btnEdit = new QPushButton("수정");
     QPushButton *btnDelete = new QPushButton("삭제");
-    QPushButton *btnSave =new QPushButton("저장");
+    QPushButton *btnSave = new QPushButton("저장");
 
     actionToolbar->addWidget(btnAdd);
     actionToolbar->addWidget(btnEdit);
@@ -125,7 +124,7 @@ QWidget* Adminwindow::createStudentPage()
         "   font-weight: bold;"
         "}"
         "QTableWidget { alternate-background-color: #f2f2f2; }"
-        );
+    );
     studentTable->setAlternatingRowColors(true);
 
     studentTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -140,7 +139,9 @@ QWidget* Adminwindow::createStudentPage()
 
     return page;
 }
-QWidget* Adminwindow::createAttendanceStatusPage() {
+
+QWidget* Adminwindow::createAttendanceStatusPage()
+{
     QWidget *page = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(page);
 
@@ -176,20 +177,24 @@ QWidget* Adminwindow::createAttendanceStatusPage() {
     layout->addWidget(attendanceTable);
 
     // 4. 조회 기능 연결 (공통 검색 함수 사용)
-    connect(btnSearch, &QPushButton::clicked, [this, attSearchOpt, attSearchEdit]() {
+    connect(btnSearch, &QPushButton::clicked, [this, attSearchOpt, attSearchEdit]()
+    {
         filterTable(attendanceTable, attSearchOpt, attSearchEdit);
     });
 
     return page;
 }
+
 bool Adminwindow::eventFilter(QObject *obj, QEvent *event)
 {
     // 테이블의 뷰포트에서 마우스 클릭 이벤트가 발생했는지 확인
-    if (obj == studentTable->viewport() && event->type() == QEvent::MouseButtonPress) {
+    if (obj == studentTable->viewport() && event->type() == QEvent::MouseButtonPress)
+    {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         // 클릭한 위치에 아이템이 있는지 확인
-        if (!studentTable->indexAt(mouseEvent->pos()).isValid()) {
+        if (!studentTable->indexAt(mouseEvent->pos()).isValid())
+        {
             // 아이템이 없는 빈 공간이면 선택 해제
             studentTable->clearSelection();
             studentTable->setCurrentCell(-1, -1);
@@ -198,12 +203,14 @@ bool Adminwindow::eventFilter(QObject *obj, QEvent *event)
     // 부모 클래스의 이벤트 처리 유지
     return QWidget::eventFilter(obj, event);
 }
+
 // --- 아래는 모든 슬롯 함수 구현입니다 (adminwindow 클래스 소속) ---
 // 1. 조회 기능 (선택된 옵션과 검색어에 따라 테이블 필터링)
 void Adminwindow::on_btnSearch_clicked()
 {
     filterTable(studentTable, searchOpt, searchEdit);
 }
+
 // 2. 추가 기능 (행 추가)
 void Adminwindow::on_btnAdd_clicked()
 {
@@ -228,6 +235,7 @@ void Adminwindow::on_btnAdd_clicked()
         refreshAttendanceTable();
     }
 }
+
 //데이터 수정
 void Adminwindow::on_btnEdit_clicked()
 {
@@ -239,7 +247,10 @@ void Adminwindow::on_btnEdit_clicked()
     }
 
     QString id = studentTable->item(row, 3) ? studentTable->item(row, 3)->text() : "";
-    if (!studentDatabase.contains(id)) return;
+    if (!studentDatabase.contains(id))
+    {
+        return;
+    }
 
     Student s = studentDatabase[id];
 
@@ -259,14 +270,17 @@ void Adminwindow::on_btnEdit_clicked()
         refreshAttendanceTable();
     }
 }
+
 //데이터 저장
 void Adminwindow::on_btnSave_clicked()
 {
     saveData();
     QMessageBox::information(this, "알림", "모든 데이터가 저장되었습니다.");
 }
+
 // 4. 삭제 기능 (선택된 행 삭제)
-void Adminwindow::on_btnDelete_clicked() {
+void Adminwindow::on_btnDelete_clicked()
+{
     int row = studentTable->currentRow();
     if (row < 0)
     {
@@ -282,6 +296,7 @@ void Adminwindow::on_btnDelete_clicked() {
         refreshAttendanceTable();
     }
 }
+
 void Adminwindow::saveData()
 {
     qDebug() << "save Data in json...";
@@ -346,9 +361,12 @@ void Adminwindow::loadData()
     QJsonArray array;
 
     // 하위 호환성 (기존 students.json 배열 형태 지원)
-    if (doc.isArray()) {
+    if (doc.isArray())
+    {
         array = doc.array();
-    } else {
+    }
+    else
+    {
         array = root["students"].toArray();
     }
 
@@ -363,7 +381,8 @@ void Adminwindow::loadData()
         s.birth = obj["birth"].toString();
         s.note = obj["note"].toString();
 
-        if (obj.contains("attendance_summary")) {
+        if (obj.contains("attendance_summary"))
+        {
             QJsonObject attObj = obj["attendance_summary"].toObject();
             s.attendance.totalDays = attObj["totalDays"].toInt(100);
             s.attendance.completedDays = attObj["completedDays"].toInt(0);
@@ -383,7 +402,10 @@ void Adminwindow::loadData()
 
 void Adminwindow::refreshStudentTable()
 {
-    if (!studentTable) return;
+    if (!studentTable)
+    {
+        return;
+    }
     studentTable->setRowCount(0);
 
     for (auto it = studentDatabase.begin(); it != studentDatabase.end(); ++it)
@@ -401,16 +423,22 @@ void Adminwindow::refreshStudentTable()
         studentTable->setItem(row, 4, new QTableWidgetItem(s.pw));
         studentTable->setItem(row, 5, new QTableWidgetItem(s.note));
 
-        for(int i = 0; i < 6; ++i) {
-            if(studentTable->item(row, i))
+        for (int i = 0; i < 6; ++i)
+        {
+            if (studentTable->item(row, i))
+            {
                 studentTable->item(row, i)->setTextAlignment(Qt::AlignCenter);
+            }
         }
     }
 }
 
 void Adminwindow::refreshAttendanceTable()
 {
-    if (!attendanceTable) return;
+    if (!attendanceTable)
+    {
+        return;
+    }
     attendanceTable->setRowCount(0);
 
     for (auto it = studentDatabase.begin(); it != studentDatabase.end(); ++it)
@@ -421,11 +449,15 @@ void Adminwindow::refreshAttendanceTable()
 
         double attendanceRate = 0;
         if (s.attendance.completedDays > 0)
+        {
             attendanceRate = (static_cast<double>(s.attendance.present) / s.attendance.completedDays) * 100.0;
+        }
 
         double progressRate = 0;
         if (s.attendance.totalDays > 0)
+        {
             progressRate = (static_cast<double>(s.attendance.completedDays) / s.attendance.totalDays) * 100.0;
+        }
 
         QTableWidgetItem *nameItem = new QTableWidgetItem(s.name);
         nameItem->setData(Qt::UserRole, s.id); // 검색용 ID 저장
@@ -442,9 +474,12 @@ void Adminwindow::refreshAttendanceTable()
         attendanceTable->setItem(row, 9, new QTableWidgetItem(QString::number(attendanceRate, 'f', 1) + "%")); // 출석률 (출석/진행일수)
         attendanceTable->setItem(row, 10, new QTableWidgetItem(QString::number(progressRate, 'f', 1) + "%"));  // 진행률 (진행일수/전체일수)
 
-        for(int col = 0; col < 11; ++col) {
-            if(attendanceTable->item(row, col))
+        for (int col = 0; col < 11; ++col)
+        {
+            if (attendanceTable->item(row, col))
+            {
                 attendanceTable->item(row, col)->setTextAlignment(Qt::AlignCenter);
+            }
         }
     }
 }
@@ -455,23 +490,32 @@ void Adminwindow::filterTable(QTableWidget *table, QComboBox *combo, QLineEdit *
     QString option = combo->currentText();
     QString keyword = edit->text().trimmed();
 
-    for (int i = 0; i < table->rowCount(); ++i) {
+    for (int i = 0; i < table->rowCount(); ++i)
+    {
         bool match = false;
 
-        if (option == "ID") {
+        if (option == "ID")
+        {
             // ID는 항상 0번 컬럼(이름)의 UserRole 데이터에 숨겨져 있음
             QTableWidgetItem *item = table->item(i, 0);
-            if (item && item->data(Qt::UserRole).toString().contains(keyword, Qt::CaseInsensitive)) {
+            if (item && item->data(Qt::UserRole).toString().contains(keyword, Qt::CaseInsensitive))
+            {
                 match = true;
             }
-        } else if (option == "이름") {
+        }
+        else if (option == "이름")
+        {
             QTableWidgetItem *item = table->item(i, 0); // 두 테이블 모두 0번이 이름
-            if (item && item->text().contains(keyword, Qt::CaseInsensitive)) {
+            if (item && item->text().contains(keyword, Qt::CaseInsensitive))
+            {
                 match = true;
             }
-        } else if (option == "전화번호") {
+        }
+        else if (option == "전화번호")
+        {
             QTableWidgetItem *item = table->item(i, 1); // 두 테이블 모두 1번이 전화번호
-            if (item && item->text().contains(keyword, Qt::CaseInsensitive)) {
+            if (item && item->text().contains(keyword, Qt::CaseInsensitive))
+            {
                 match = true;
             }
         }
