@@ -1,7 +1,9 @@
 #include "login.h"
 #include "./ui_login.h"
+
 #include "sign_up.h"
 #include "admin_window.h"
+
 #include <QMessageBox>
 
 Login::Login(QWidget *parent)
@@ -12,6 +14,7 @@ Login::Login(QWidget *parent)
     client = new Client(this);
     client->connectToServer();
 
+    // 시그널 슬롯 커넥트
     connect(client, SIGNAL(loginResult(bool, QJsonObject)),
             this, SLOT(onLoginResult(bool, QJsonObject)));
     connect(client, SIGNAL(loginResultAdmin(bool,QJsonObject,QJsonArray)),
@@ -37,25 +40,25 @@ void Login::on_login_button_clicked()
 /**
  * @brief 로그인 성공 여부 받아오기
  * @param success 성공/실패 여부
- * @param user_json 유저 데이터. 실패 시, empty 객체 받아옴
+ * @param userJson 유저 데이터. 실패 시, empty 객체 받아옴
  */
-void Login::onLoginResult(bool success, QJsonObject user_json)
+void Login::onLoginResult(bool success, QJsonObject userJson)
 {
     if(success)
     {
         qDebug() << "success";
 
-        User* user = new User(user_json);
+        User* user = new User(userJson);
 
-        msg_box = QMessageBox::information(
+        msgBox = QMessageBox::information(
             this,
             "로그인 성공",
             QString("%1님 환영합니다.").arg(user->getName()),
             QMessageBox::Ok);
 
-        UserMainpage* user_page = new UserMainpage(client, user);
-        user_page->setAttribute(Qt::WA_DeleteOnClose);
-        user_page->show();
+        UserMainpage* userPage = new UserMainpage(client, user);
+        userPage->setAttribute(Qt::WA_DeleteOnClose);
+        userPage->show();
 
 
         this->close();
@@ -66,28 +69,27 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
     }
 }
 
-void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info)
+/**
+ * @brief 관리자 계정으로 로그인 결과 전송받을 경우
+ * @param success 로그인 성공 여부
+ * @param userJson 관리자 유저 정보
+ * @param usersInfo 전체 유저 정보
+ */
+void Login::onLoginResultAdmin(bool success, QJsonObject userJson, QJsonArray usersInfo)
 {
     if(success)
     {
         qDebug() << "success";
 
-        for(const QJsonValue &value : users_info)
-        {
-            QJsonObject user = value.toObject();
-            qDebug() << user["id"].toString();
-        }
+        User* user = new User(userJson);
 
-        User* user = new User(user_json);
-
-        msg_box = QMessageBox::information(
+        msgBox = QMessageBox::information(
             this,
             "로그인 성공",
             QString("%1님 환영합니다.").arg(user->getName()),
             QMessageBox::Ok);
 
-
-        Adminwindow* admin_page = new Adminwindow(users_info, client);
+        Adminwindow* admin_page = new Adminwindow(usersInfo, client);
         admin_page->setAttribute(Qt::WA_DeleteOnClose);
         admin_page->show();
 
@@ -100,7 +102,7 @@ void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray u
 }
 
 /**
- * @brief 회원가입 버튼 선택 시
+ * @brief 회원가입 버튼 선택 시 화면 출력
  */
 void Login::on_sign_up_button_clicked()
 {

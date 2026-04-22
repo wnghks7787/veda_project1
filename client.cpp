@@ -130,40 +130,45 @@ void Client::onDisconnected()
  */
 void Client::onReadyRead()
 {
-    QByteArray data = socket->readAll();
+    QByteArray data = socket->readAll(); // 서버에서 값을 읽어옴
 
-    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data); // 기본적으로 서버는 json으로 통신하기에 값을 읽을 수 있도록 변환
     QJsonObject obj = doc.object();
 
     QString type = obj["type"].toString();
 
+    // 로그인 시
     if(type == "login")
     {
         bool success = obj["success"].toBool();
         QJsonObject user = obj["user"].toObject();
 
+        // 관리자 로그인 시
         if(user["id"] == "admin")
         {
-            QJsonArray users_info = obj["users_info"].toArray();
-            emit loginResultAdmin(success, user, users_info);
+            QJsonArray usersInfo = obj["usersInfo"].toArray();
+            emit loginResultAdmin(success, user, usersInfo);
         }
         else
         {
             emit loginResult(success, user);
         }
     }
+    // 아이디 중복 확인 시
     else if(type == "verifyId")
     {
         bool success = obj["success"].toBool();
 
         emit verifiedResult(success);
     }
+    // 회원가입 시
     else if(type == "signUp")
     {
         bool success = obj["success"].toBool();
 
         emit signUpResult(success);
     }
+    // 사용자 정보 변경 시
     else if(type == "editUser")
     {
         bool success = obj["success"].toBool();

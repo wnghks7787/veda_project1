@@ -14,9 +14,10 @@ SignUp::SignUp(Client* client, QWidget *parent)
 {
     ui->setupUi(this);
 
-    verified_id = false;
-    this->client = client;
+    verifiedId = false; // 기본적으로 중복확인은 되어있지 않기 때문에 false
+    this->client = client; // 서버 통신용 클라이언트 객체
 
+    // 시그널 슬롯 연결하는 부분
     connect(client, SIGNAL(verifiedResult(bool)), this, SLOT(onVerifiedResult(bool)));
     connect(client, SIGNAL(signUpResult(bool)), this, SLOT(onSignUpResult(bool)));
 }
@@ -27,12 +28,12 @@ SignUp::~SignUp()
 }
 
 /**
- * @brief 회원가입 버튼
+ * @brief 회원가입 버튼.
  */
 void SignUp::on_ok_button_clicked()
 {
     // 실패 로직
-    if(!verified_id)
+    if(!verifiedId)
     {
         reply = QMessageBox::critical(
             this,
@@ -58,7 +59,7 @@ void SignUp::on_ok_button_clicked()
     user["birthday"] = ui->birthday_edit->date().toString(Qt::ISODate);
     user["id"] = ui->id_edit->text();
     user["password"] = ui->pw_edit->text();
-    user["phone_num"] = ui->phone_edit->text();
+    user["phoneNum"] = ui->phone_edit->text();
 
     client->sendSignUp(user);
 }
@@ -82,7 +83,7 @@ void SignUp::onVerifiedResult(bool success)
 {
     if(success)
     {
-        verified_id = true;
+        verifiedId = true;
         reply = QMessageBox::information(
             this,
             "중복 검사",
@@ -91,7 +92,7 @@ void SignUp::onVerifiedResult(bool success)
     }
     else
     {
-        verified_id = false;
+        verifiedId = false;
         reply = QMessageBox::critical(
             this,
             "중복 검사",
@@ -124,7 +125,7 @@ void SignUp::onSignUpResult(bool success)
  */
 void SignUp::on_id_edit_textChanged(const QString &arg1)
 {
-    verified_id = false;
+    verifiedId = false;
 }
 
 

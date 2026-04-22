@@ -1,3 +1,9 @@
+/**
+ * 유저 수정 등에 사용되는 dialog
+ * 중복 검사 등을 할 수 있으며, 유저 정보 수정, 유저 추가 가능
+ * 수정된 결과는 서버에 저장
+ * */
+
 #ifndef STUDENT_DIALOG_H
 #define STUDENT_DIALOG_H
 #include <QDialog>
@@ -7,7 +13,7 @@
 #include <QStringList>
 #include <QPushButton>
 
-class studentdialog : public QDialog
+class StudentDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -15,10 +21,10 @@ public:
      * @brief 함수 기능: 학생 정보 입력 대화 상자 생성 및 초기화
      * @param existingIds: 중복 검사를 위한 기존 학생 ID 목록
      * @param parent: 부모 위젯
-     * @return: studentdialog 객체
+     * @return: StudentDialog 객체
      * @details 핵심 원리: QFormLayout을 기본 레이아웃으로 설정하고, ID 입력란에는 QHBoxLayout을 중첩하여 중복 확인 버튼을 배치함.
      */
-    explicit studentdialog(const QStringList &existingIds, QWidget *parent = nullptr);
+    explicit StudentDialog(const QStringList &existingIds, QWidget *parent = nullptr);
 
     /**
      * @brief 함수 기능: 입력된 이름 반환

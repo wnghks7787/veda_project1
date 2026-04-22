@@ -8,7 +8,7 @@
  * @param parent: 부모 위젯
  * @return: 없음 (생성자)
  */
-studentdialog::studentdialog(const QStringList &existingIds, QWidget *parent)
+StudentDialog::StudentDialog(const QStringList &existingIds, QWidget *parent)
     : QDialog(parent), m_existingIds(existingIds)
 {
     setWindowTitle("학생 정보 추가");
@@ -86,7 +86,7 @@ studentdialog::studentdialog(const QStringList &existingIds, QWidget *parent)
  * @param name, phone, birth, id, pw, note: 각각의 학생 정보 필드 값
  * @return 없음
  */
-void studentdialog::setStudentData(const QString& name, const QString& phone, const QString& birth, const QString& id, const QString& pw, const QString& note)
+void StudentDialog::setStudentData(const QString& name, const QString& phone, const QString& birth, const QString& id, const QString& pw, const QString& note)
 {
     // [핵심 원리]: 수정 모드에서는 기존 학생 객체의 정보를 UI 필드에 채워 넣음.
     nameEdit->setText(name);
