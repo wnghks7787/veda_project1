@@ -20,6 +20,7 @@ public:
 
 signals:
     void loginResult(bool success, QJsonObject user);
+    void loginResultAdmin(bool success, QJsonObject user, QJsonArray users);
     void verifiedResult(bool success);
     void signUpResult(bool success);
     void connected();

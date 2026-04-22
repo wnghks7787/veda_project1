@@ -126,7 +126,15 @@ void Client::onReadyRead()
         bool success = obj["success"].toBool();
         QJsonObject user = obj["user"].toObject();
 
-        emit loginResult(success, user);
+        if(user["id"] == "admin")
+        {
+            QJsonArray users_info = obj["users_info"].toArray();
+            emit loginResultAdmin(success, user, users_info);
+        }
+        else
+        {
+            emit loginResult(success, user);
+        }
     }
     else if(type == "verifyId")
     {

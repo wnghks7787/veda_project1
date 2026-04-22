@@ -26,6 +26,7 @@ private slots:
 
     void on_sign_up_button_clicked();
     void onLoginResult(bool success, QJsonObject user_json);
+    void onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info);
 
 private:
     QMessageBox::StandardButton msg_box; // 메시지 박스

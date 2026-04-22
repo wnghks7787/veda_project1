@@ -12,7 +12,10 @@ Login::Login(QWidget *parent)
     client = new Client(this);
     client->connectToServer();
 
-    connect(client, SIGNAL(loginResult(bool, QJsonObject)), this, SLOT(onLoginResult(bool, QJsonObject)));
+    connect(client, SIGNAL(loginResult(bool, QJsonObject)),
+            this, SLOT(onLoginResult(bool, QJsonObject)));
+    connect(client, SIGNAL(loginResultAdmin(bool,QJsonObject,QJsonArray)),
+            this, SLOT(onLoginResultAdmin(bool,QJsonObject,QJsonArray)));
 }
 
 Login::~Login() {
@@ -49,19 +52,44 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
             "로그인 성공",
             QString("%1님 환영합니다.").arg(user->getName()),
             QMessageBox::Ok);
-        if(user->getId() == "admin")
+
+        UserMainpage* user_page = new UserMainpage(client, user);
+        user_page->setAttribute(Qt::WA_DeleteOnClose);
+        user_page->show();
+
+
+        this->close();
+    }
+    else
+    {
+        qDebug() << "fail";
+    }
+}
+
+void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info)
+{
+    if(success)
+    {
+        qDebug() << "success";
+
+        for(const QJsonValue &value : users_info)
         {
-            Adminwindow* admin_page = new Adminwindow();
-            admin_page->setAttribute(Qt::WA_DeleteOnClose);
-            admin_page->show();
-        }
-        else
-        {
-            UserMainpage* user_page = new UserMainpage(client, user);
-            user_page->setAttribute(Qt::WA_DeleteOnClose);
-            user_page->show();
+            QJsonObject user = value.toObject();
+            qDebug() << user["id"].toString();
         }
 
+        User* user = new User(user_json);
+
+        msg_box = QMessageBox::information(
+            this,
+            "로그인 성공",
+            QString("%1님 환영합니다.").arg(user->getName()),
+            QMessageBox::Ok);
+
+
+        Adminwindow* admin_page = new Adminwindow();
+        admin_page->setAttribute(Qt::WA_DeleteOnClose);
+        admin_page->show();
 
         this->close();
     }
