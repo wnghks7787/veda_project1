@@ -1,6 +1,6 @@
 //main.cpp
 #include "login.h"
-#include "adminwindow.h"
+#include "admin_window.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
