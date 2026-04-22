@@ -29,15 +29,10 @@ public:
 
 private slots:
     void on_verify_id_button_clicked(); // 아이디 중복확인 슬롯
-
     void on_id_edit_textChanged(const QString &arg1); // 아이디 필드 변경 시 작동 슬롯
-
     void on_ok_button_clicked(); // 회원가입 버튼 슬롯
-
     void on_cancel_button_clicked(); // 취소버튼 슬롯
-
     void onVerifiedResult(bool success);// 서버로부터 아이디 중복확인 결과 수신
-
     void onSignUpResult(bool success); // 서버로부터 회원가입 결과 수신
 
 private:

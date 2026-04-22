@@ -1,3 +1,7 @@
+/**
+ * 유저 정보를 담는 클래스
+ * */
+
 #ifndef USER_H
 #define USER_H
 
@@ -13,6 +17,7 @@ public:
     User(QJsonObject user_json);
     ~User();
 
+    // 각각 필요한 getter() / setter()들
     QString getName() const;
     void setName(const QString &newName);
     QDate getBirthday() const;
@@ -34,20 +39,24 @@ public:
 
     QJsonObject getUserJson();
 
-    void withdraw();
+    void withdraw(); // 사용자 회원 탈퇴
 
 private:
-    QString name;
-    QDate birthday;
-    QString id;
-    QString password;
-    QString phone_num;
-    int age;
-    int present;
-    int absent;
-    int late;
-    int early_leave;
-    int be_out;
+    QString id; // 아이디
+
+    // user info
+    QString name; // 이름
+    QDate birthday; // 생년월일
+    QString password; // 비밀번호
+    QString phone_num; // 전화번호
+    int age; // 나이
+
+    // attendance ( 지각/조퇴/외출 총 3회당 결석 1회)
+    int present; // 출석
+    int absent; // 결석
+    int late; // 지각
+    int early_leave; // 조퇴
+    int be_out; // 외출
 
     Client* client;
 };
