@@ -12,6 +12,7 @@ Login::Login(QWidget *parent)
     client = new Client(this);
     client->connectToServer();
 
+    // 시그널 슬롯 커넥트
     connect(client, SIGNAL(loginResult(bool, QJsonObject)),
             this, SLOT(onLoginResult(bool, QJsonObject)));
     connect(client, SIGNAL(loginResultAdmin(bool,QJsonObject,QJsonArray)),

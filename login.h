@@ -1,3 +1,10 @@
+/**
+ * 로그인 로직을 처리하는 클래스
+ * login.ui를 통해 로그인 페이지를 생성
+ * 로그인 시 서버와 통신하며, 아이디/비밀번호 정보를 서버에 전송
+ * 회원가입 시 회원가입 페이지를 띄워주는 역할을 수행
+ * */
+
 #ifndef LOGIN_H
 #define LOGIN_H
 
@@ -22,11 +29,11 @@ public:
     ~Login() override;
 
 private slots:
-    void on_login_button_clicked();
+    void on_login_button_clicked(); // 로그인 버튼 작동 슬롯
 
-    void on_sign_up_button_clicked();
-    void onLoginResult(bool success, QJsonObject user_json);
-    void onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info);
+    void on_sign_up_button_clicked(); // 회원가입 버튼 작동 슬롯
+    void onLoginResult(bool success, QJsonObject user_json); // 서버로부터 로그인 결과 수신(비관리자)
+    void onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info); // 서버로부터 로그인 결과 수신(관리자)
 
 private:
     QMessageBox::StandardButton msg_box; // 메시지 박스
@@ -34,6 +41,6 @@ private:
     UserMainpage* user_page; // 유저 페이지
     Ui::Widget *ui;
 
-    Client* client; // 클라이언트 소켓
+    Client* client; // 서버와 통신할 클라이언트 객체
 };
 #endif // LOGIN_H
