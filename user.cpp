@@ -14,15 +14,15 @@ User::User(QJsonObject user_json)
     this->birthday = QDate::fromString(info["birthday"].toString());
     this->id = user_json["id"].toString();
     this->password = info["password"].toString();
-    this->phone_num = info["phone_num"].toString();
+    this->phoneNum = info["phoneNum"].toString();
     this->age = info["age"].toInt();
 
     QJsonObject attendance = user_json["attendance"].toObject();
     this->present = attendance["present"].toInt();
     this->absent = attendance["absent"].toInt();
     this->late = attendance["late"].toInt();
-    this->early_leave = attendance["early_leave"].toInt();
-    this->be_out = attendance["be_out"].toInt();
+    this->earlyLeave = attendance["earlyLeave"].toInt();
+    this->beOut = attendance["beOut"].toInt();
 }
 
 User::~User()
@@ -71,14 +71,14 @@ void User::setPassword(const QString &newPassword)
     password = newPassword;
 }
 
-QString User::getPhone_num() const
+QString User::getPhoneNum() const
 {
-    return phone_num;
+    return phoneNum;
 }
 
-void User::setPhone_num(const QString &newPhone_num)
+void User::setPhoneNum(const QString &newPhoneNum)
 {
-    phone_num = newPhone_num;
+    phoneNum = newPhoneNum;
 }
 
 int User::getAge() const
@@ -106,14 +106,14 @@ int User::getLate() const
     return late;
 }
 
-int User::getEarly_leave() const
+int User::getEarlyLeave() const
 {
-    return early_leave;
+    return earlyLeave;
 }
 
-int User::getBe_out() const
+int User::getBeOut() const
 {
-    return be_out;
+    return beOut;
 }
 
 QJsonObject User::getUserJson()
@@ -124,15 +124,15 @@ QJsonObject User::getUserJson()
     info["name"] = name;
     info["birthday"] = birthday.toString();
     info["password"] = password;
-    info["phone_num"] = phone_num;
+    info["phoneNum"] = phoneNum;
     info["age"] = age;
 
     QJsonObject attendance = res["attendance"].toObject();
     attendance["present"] = present;
     attendance["absent"] = absent;
     attendance["late"] = late;
-    attendance["early_leave"] = early_leave;
-    attendance["be_out"] = be_out;
+    attendance["earlyLeave"] = earlyLeave;
+    attendance["beOut"] = beOut;
 
     res["info"] = info;
     res["attendance"] = attendance;

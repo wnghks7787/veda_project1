@@ -32,13 +32,13 @@ private slots:
     void on_login_button_clicked(); // 로그인 버튼 작동 슬롯
 
     void on_sign_up_button_clicked(); // 회원가입 버튼 작동 슬롯
-    void onLoginResult(bool success, QJsonObject user_json); // 서버로부터 로그인 결과 수신(비관리자)
-    void onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info); // 서버로부터 로그인 결과 수신(관리자)
+    void onLoginResult(bool success, QJsonObject userJson); // 서버로부터 로그인 결과 수신(비관리자)
+    void onLoginResultAdmin(bool success, QJsonObject userJson, QJsonArray usersInfo); // 서버로부터 로그인 결과 수신(관리자)
 
 private:
     QMessageBox::StandardButton msg_box; // 메시지 박스
 
-    UserMainpage* user_page; // 유저 페이지
+    UserMainpage* userPage; // 유저 페이지
     Ui::Widget *ui;
 
     Client* client; // 서버와 통신할 클라이언트 객체

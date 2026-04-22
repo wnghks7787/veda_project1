@@ -26,16 +26,16 @@ public:
     void setId(const QString &newId);
     QString getPassword() const;
     void setPassword(const QString &newPassword);
-    QString getPhone_num() const;
-    void setPhone_num(const QString &newPhone_num);
+    QString getPhoneNum() const;
+    void setPhoneNum(const QString &newphoneNum);
     int getAge() const;
     void setAge(int newAge);
 
     int getPresent() const;
     int getAbsent() const;
     int getLate() const;
-    int getEarly_leave() const;
-    int getBe_out() const;
+    int getEarlyLeave() const;
+    int getBeOut() const;
 
     QJsonObject getUserJson();
 
@@ -48,15 +48,15 @@ private:
     QString name; // 이름
     QDate birthday; // 생년월일
     QString password; // 비밀번호
-    QString phone_num; // 전화번호
+    QString phoneNum; // 전화번호
     int age; // 나이
 
     // attendance ( 지각/조퇴/외출 총 3회당 결석 1회)
     int present; // 출석
     int absent; // 결석
     int late; // 지각
-    int early_leave; // 조퇴
-    int be_out; // 외출
+    int earlyLeave; // 조퇴
+    int beOut; // 외출
 
     Client* client;
 };

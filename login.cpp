@@ -56,9 +56,9 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
             QString("%1님 환영합니다.").arg(user->getName()),
             QMessageBox::Ok);
 
-        UserMainpage* user_page = new UserMainpage(client, user);
-        user_page->setAttribute(Qt::WA_DeleteOnClose);
-        user_page->show();
+        UserMainpage* userPage = new UserMainpage(client, user);
+        userPage->setAttribute(Qt::WA_DeleteOnClose);
+        userPage->show();
 
 
         this->close();
@@ -72,22 +72,22 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
 /**
  * @brief 관리자 계정으로 로그인 결과 전송받을 경우
  * @param success 로그인 성공 여부
- * @param user_json 관리자 유저 정보
- * @param users_info 전체 유저 정보
+ * @param userJson 관리자 유저 정보
+ * @param usersInfo 전체 유저 정보
  */
-void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info)
+void Login::onLoginResultAdmin(bool success, QJsonObject userJson, QJsonArray usersInfo)
 {
     if(success)
     {
         qDebug() << "success";
 
-        for(const QJsonValue &value : users_info)
+        for(const QJsonValue &value : usersInfo)
         {
             QJsonObject user = value.toObject();
             qDebug() << user["id"].toString();
         }
 
-        User* user = new User(user_json);
+        User* user = new User(userJson);
 
         msg_box = QMessageBox::information(
             this,
@@ -96,7 +96,7 @@ void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray u
             QMessageBox::Ok);
 
 
-        Adminwindow* admin_page = new Adminwindow(users_info, client);
+        Adminwindow* admin_page = new Adminwindow(usersInfo, client);
         admin_page->setAttribute(Qt::WA_DeleteOnClose);
         admin_page->show();
 

@@ -39,7 +39,7 @@ private:
     Ui::user_page *ui;
 
     QString id; // 로그인 한 유저의 아이디
-    QMessageBox::StandardButton msg_box; // 메시지 박스
+    QMessageBox::StandardButton msgBox; // 메시지 박스
     User* user; // 로그인 한 유저의 정보
     Client* client; // 클라이언트 소켓
 };

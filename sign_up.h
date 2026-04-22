@@ -38,7 +38,7 @@ private slots:
 private:
     Ui::sign_up_dialog* ui;
 
-    bool verified_id; // id 중복 확인
+    bool verifiedId; // id 중복 확인
     QMessageBox::StandardButton reply; // 메시지 박스
     Client* client; // 서버와 통신할 클라이언트 객체
 };

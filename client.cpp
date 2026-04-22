@@ -146,8 +146,8 @@ void Client::onReadyRead()
         // 관리자 로그인 시
         if(user["id"] == "admin")
         {
-            QJsonArray users_info = obj["users_info"].toArray();
-            emit loginResultAdmin(success, user, users_info);
+            QJsonArray usersInfo = obj["users_info"].toArray();
+            emit loginResultAdmin(success, user, usersInfo);
         }
         else
         {

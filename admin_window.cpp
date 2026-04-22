@@ -202,6 +202,12 @@ QWidget* Adminwindow::createAttendanceStatusPage()
     return page;
 }
 
+/**
+ * @brief 마우스 이벤트 처리 로직
+ * @param obj
+ * @param event
+ * @return
+ */
 bool Adminwindow::eventFilter(QObject *obj, QEvent *event)
 {
     // 테이블의 뷰포트에서 마우스 클릭 이벤트가 발생했는지 확인
@@ -238,7 +244,7 @@ void Adminwindow::on_btnAdd_clicked()
     QStringList existingIds = studentDatabase.keys();
 
     // 수집된 목록을 다이얼로그로 전달
-    studentdialog dialog(existingIds, this);
+    StudentDialog dialog(existingIds, this);
 
     if (dialog.exec() == QDialog::Accepted)
     {
@@ -288,7 +294,7 @@ void Adminwindow::on_btnEdit_clicked()
 
     Student s = studentDatabase[id];
 
-    studentdialog dialog(QStringList(), this);
+    StudentDialog dialog(QStringList(), this);
     dialog.setStudentData(s.name, s.phone, s.birth, s.id, s.pw, s.note);
 
     if (dialog.exec() == QDialog::Accepted)

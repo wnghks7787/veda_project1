@@ -21,14 +21,14 @@ UserMainpage::UserMainpage(Client* client, User* user, QWidget *parent)
     // 출결 현황 값 지정
     int present = user->getPresent(); // 출석
     int late = user->getLate(); // 지각
-    int early = user->getEarly_leave(); // 조퇴
-    int out = user->getBe_out(); // 외출
+    int early = user->getEarlyLeave(); // 조퇴
+    int out = user->getBeOut(); // 외출
     int abs = user->getAbsent(); // 결석
 
     // 지각/조퇴/외출 3회당 결석 1회
-    int effective_absent = abs + (late + early + out) / 3;
-    double absentRate = effective_absent;
-    double attendanceRate = 100.0 - effective_absent;
+    int effectivAabsent = abs + (late + early + out) / 3;
+    double absentRate = effectivAabsent;
+    double attendanceRate = 100.0 - effectivAabsent;
 
     // ui에 결과 출력
     ui->label_title->setText(QString("<h2>%1님의 출결 현황 (총 100일)</h2>").arg(user->getName()));
@@ -53,7 +53,7 @@ void UserMainpage::setId(QString &id)
  */
 void UserMainpage::on_logout_button_clicked()
 {
-    msg_box = QMessageBox::information(
+    msgBox = QMessageBox::information(
         this,
         "로그아웃",
         "로그아웃 하시겠습니까?",
@@ -62,7 +62,7 @@ void UserMainpage::on_logout_button_clicked()
 
 
 
-    if(msg_box == QMessageBox::Ok)
+    if(msgBox == QMessageBox::Ok)
     {
         this->close();
 
@@ -79,14 +79,14 @@ void UserMainpage::on_logout_button_clicked()
  */
 void UserMainpage::on_withdraw_button_clicked()
 {
-    msg_box = QMessageBox::critical(
+    msgBox = QMessageBox::critical(
         this,
         "회원 탈퇴",
         "회원 탈퇴를 하시겠습니까?\n(주의! 취소할 수 없습니다.",
         QMessageBox::Ok|
         QMessageBox::Cancel);
 
-    if(msg_box == QMessageBox::Ok)
+    if(msgBox == QMessageBox::Ok)
     {
         QString id = user->getId();
         client->sendWithdraw(id);
