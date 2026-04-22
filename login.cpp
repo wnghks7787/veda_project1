@@ -1,7 +1,9 @@
 #include "login.h"
 #include "./ui_login.h"
+
 #include "sign_up.h"
 #include "admin_window.h"
+
 #include <QMessageBox>
 
 Login::Login(QWidget *parent)
@@ -67,6 +69,12 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
     }
 }
 
+/**
+ * @brief 관리자 계정으로 로그인 결과 전송받을 경우
+ * @param success 로그인 성공 여부
+ * @param user_json 관리자 유저 정보
+ * @param users_info 전체 유저 정보
+ */
 void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray users_info)
 {
     if(success)
@@ -101,7 +109,7 @@ void Login::onLoginResultAdmin(bool success, QJsonObject user_json, QJsonArray u
 }
 
 /**
- * @brief 회원가입 버튼 선택 시
+ * @brief 회원가입 버튼 선택 시 화면 출력
  */
 void Login::on_sign_up_button_clicked()
 {
