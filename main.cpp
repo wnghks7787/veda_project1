@@ -1,6 +1,5 @@
 //main.cpp
 #include "login.h"
-#include "admin_window.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -9,5 +8,4 @@ int main(int argc, char *argv[])
     Login w;
     w.show();
     return QCoreApplication::exec();
-    // return a.exec();
 }
