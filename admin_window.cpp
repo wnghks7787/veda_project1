@@ -5,6 +5,10 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include <QSpinBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFormLayout>
 
 Adminwindow::Adminwindow(QJsonArray users_info, Client *client, QWidget *parent) : QWidget(parent)
 {
@@ -15,6 +19,7 @@ Adminwindow::Adminwindow(QJsonArray users_info, Client *client, QWidget *parent)
     resize(1100, 700);
 }
 
+// UI 설정
 void Adminwindow::setupUI()
 {
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
@@ -108,11 +113,7 @@ QWidget* Adminwindow::createStudentPage()
     // 테이블 설정
     studentTable = new QTableWidget(0, 6);
     studentTable->setHorizontalHeaderLabels({"이름", "전화번호", "생년월일", "ID", "Password", "비고"});
-
-    //
-    // 아래 코드를 추가하여 편집 기능을 봉쇄. 추후 오픈 예정
     studentTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    //
 
     // 이벤트 필터 설치
     studentTable->viewport()->installEventFilter(this);
@@ -158,18 +159,20 @@ QWidget* Adminwindow::createAttendanceStatusPage()
     QLineEdit *attSearchEdit = new QLineEdit();
     attSearchEdit->setPlaceholderText("검색어를 입력하세요...");
     QPushButton *btnSearch = new QPushButton("조회");
+    QPushButton *btnAttEdit = new QPushButton("수정");
 
     searchLayout->addWidget(new QLabel("검색:"));
     searchLayout->addWidget(attSearchOpt); // 콤보박스 추가
     searchLayout->addWidget(attSearchEdit);
     searchLayout->addWidget(btnSearch);
+    searchLayout->addWidget(btnAttEdit);
     searchLayout->addStretch();
     layout->addLayout(searchLayout);
 
     // 테이블 구성
     attendanceTable = new QTableWidget(0, 11);
     // 각 컬럼 헤더 설정: 학생명, 전화번호, ID, 진도(진행일수/전체일수), 출석, 지각, 조퇴, 외출, 결석, 출석률, 진행률
-    attendanceTable->setHorizontalHeaderLabels({"학생명", "전화번호", "ID", "진도/전체", "출석", "지각", "조퇴", "외출", "결석", "출석률", "진행률"});
+    attendanceTable->setHorizontalHeaderLabels({"학생명", "전화번호", "ID", "진도/전체", "출석", "지각", "조퇴", "외출", "결석", "출석률", "결석률"});
     attendanceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     // 기존 스타일 유지
@@ -184,6 +187,7 @@ QWidget* Adminwindow::createAttendanceStatusPage()
             {
                 filterTable(attendanceTable, attSearchOpt, attSearchEdit);
             });
+    connect(btnAttEdit, &QPushButton::clicked, this, &Adminwindow::on_btnAttEdit_clicked);
 
     return page;
 }
@@ -236,6 +240,17 @@ void Adminwindow::on_btnAdd_clicked()
 
         refreshStudentTable();
         refreshAttendanceTable();
+
+        // 새로 추가된 유저를 서버로 전송 (editUser가 upsert 역할을 하도록 서버 수정됨)
+        if (client) {
+            QJsonObject user;
+            user["name"] = s.name;
+            user["birthday"] = s.birth;
+            user["id"] = s.id;
+            user["password"] = s.pw;
+            user["phone_num"] = s.phone;
+            client->sendSignUp(user);
+        }
     }
 }
 
@@ -273,6 +288,76 @@ void Adminwindow::on_btnEdit_clicked()
         refreshAttendanceTable();
         
         // 서버로 수정 내역 전송
+        if (client) {
+            client->sendEditUser(studentToJson(studentDatabase[id]));
+        }
+    }
+}
+
+// 출결 정보 수정
+void Adminwindow::on_btnAttEdit_clicked()
+{
+    int row = attendanceTable->currentRow();
+    if (row < 0)
+    {
+        QMessageBox::warning(this, "알림", "출결을 수정할 학생을 먼저 선택하세요.");
+        return;
+    }
+
+    QString id = attendanceTable->item(row, 2) ? attendanceTable->item(row, 2)->text() : "";
+    if (!studentDatabase.contains(id))
+    {
+        return;
+    }
+
+    Student s = studentDatabase[id];
+
+    QDialog dialog(this);
+    dialog.setWindowTitle("출결 정보 수정");
+    QFormLayout form(&dialog);
+
+    QSpinBox *spinPresent = new QSpinBox(&dialog);
+    QSpinBox *spinLate = new QSpinBox(&dialog);
+    QSpinBox *spinEarly = new QSpinBox(&dialog);
+    QSpinBox *spinOut = new QSpinBox(&dialog);
+    QSpinBox *spinAbs = new QSpinBox(&dialog);
+
+    // Set ranges
+    spinPresent->setRange(0, 100);
+    spinLate->setRange(0, 100);
+    spinEarly->setRange(0, 100);
+    spinOut->setRange(0, 100);
+    spinAbs->setRange(0, 100);
+
+    // Set current values
+    spinPresent->setValue(s.attendance.present);
+    spinLate->setValue(s.attendance.late);
+    spinEarly->setValue(s.attendance.early);
+    spinOut->setValue(s.attendance.out);
+    spinAbs->setValue(s.attendance.abs);
+
+    form.addRow("출석:", spinPresent);
+    form.addRow("지각:", spinLate);
+    form.addRow("조퇴:", spinEarly);
+    form.addRow("외출:", spinOut);
+    form.addRow("결석:", spinAbs);
+
+    QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &dialog);
+    form.addRow(&buttonBox);
+    connect(&buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    connect(&buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        studentDatabase[id].attendance.present = spinPresent->value();
+        studentDatabase[id].attendance.late = spinLate->value();
+        studentDatabase[id].attendance.early = spinEarly->value();
+        studentDatabase[id].attendance.out = spinOut->value();
+        studentDatabase[id].attendance.abs = spinAbs->value();
+
+        refreshAttendanceTable();
+        refreshStudentTable();
+
         if (client) {
             client->sendEditUser(studentToJson(studentDatabase[id]));
         }
@@ -336,6 +421,10 @@ void Adminwindow::on_btnDelete_clicked()
 
         refreshStudentTable();
         refreshAttendanceTable();
+
+        if (client) {
+            client->sendWithdraw(id);
+        }
     }
 }
 
@@ -476,32 +565,24 @@ void Adminwindow::refreshAttendanceTable()
         int row = attendanceTable->rowCount();
         attendanceTable->insertRow(row);
 
-        double attendanceRate = 0;
-        if (s.attendance.completedDays > 0)
-        {
-            attendanceRate = (static_cast<double>(s.attendance.present) / s.attendance.completedDays) * 100.0;
-        }
-
-        double progressRate = 0;
-        if (s.attendance.totalDays > 0)
-        {
-            progressRate = (static_cast<double>(s.attendance.completedDays) / s.attendance.totalDays) * 100.0;
-        }
+        int effective_absent = s.attendance.abs + (s.attendance.late + s.attendance.early + s.attendance.out) / 3;
+        double absentRate = effective_absent; // 100일 기준 결석률
+        double attendanceRate = 100.0 - effective_absent; // 100일 기준 출석률
 
         QTableWidgetItem *nameItem = new QTableWidgetItem(s.name);
         nameItem->setData(Qt::UserRole, s.id); // 검색용 ID 저장
         attendanceTable->setItem(row, 0, nameItem);
         attendanceTable->setItem(row, 1, new QTableWidgetItem(s.phone));
         attendanceTable->setItem(row, 2, new QTableWidgetItem(s.id)); // 학생 ID
-        // 진행일수 / 전체일수 표시
-        attendanceTable->setItem(row, 3, new QTableWidgetItem(QString("%1 / %2").arg(s.attendance.completedDays).arg(s.attendance.totalDays)));
+        // 진도는 출석 / 100
+        attendanceTable->setItem(row, 3, new QTableWidgetItem(QString("%1 / 100").arg(s.attendance.present)));
         attendanceTable->setItem(row, 4, new QTableWidgetItem(QString::number(s.attendance.present))); // 출석 횟수
         attendanceTable->setItem(row, 5, new QTableWidgetItem(QString::number(s.attendance.late)));    // 지각 횟수
         attendanceTable->setItem(row, 6, new QTableWidgetItem(QString::number(s.attendance.early)));   // 조퇴 횟수
         attendanceTable->setItem(row, 7, new QTableWidgetItem(QString::number(s.attendance.out)));     // 외출 횟수
         attendanceTable->setItem(row, 8, new QTableWidgetItem(QString::number(s.attendance.abs)));     // 결석 횟수
-        attendanceTable->setItem(row, 9, new QTableWidgetItem(QString::number(attendanceRate, 'f', 1) + "%")); // 출석률 (출석/진행일수)
-        attendanceTable->setItem(row, 10, new QTableWidgetItem(QString::number(progressRate, 'f', 1) + "%"));  // 진행률 (진행일수/전체일수)
+        attendanceTable->setItem(row, 9, new QTableWidgetItem(QString::number(attendanceRate, 'f', 1) + "%")); // 출석률
+        attendanceTable->setItem(row, 10, new QTableWidgetItem(QString::number(absentRate, 'f', 1) + "%"));  // 결석률
 
         for (int col = 0; col < 11; ++col)
         {

@@ -22,7 +22,24 @@ UserMainpage::UserMainpage(Client* client, User* user, QWidget *parent)
     sidebar->setStyleSheet("background-coolor: #2c3e50");
     sidebar->setFixedWidth(200);
 
+    // Populate attendance data
+    int present = user->getPresent();
+    int late = user->getLate();
+    int early = user->getEarly_leave();
+    int out = user->getBe_out();
+    int abs = user->getAbsent();
 
+    int effective_absent = abs + (late + early + out) / 3;
+    double absentRate = effective_absent;
+    double attendanceRate = 100.0 - effective_absent;
+
+    ui->label_title->setText(QString("<h2>%1님의 출결 현황 (총 100일)</h2>").arg(user->getName()));
+    ui->label_present->setText(QString("출석: %1회").arg(present));
+    ui->label_late->setText(QString("지각: %1회").arg(late));
+    ui->label_early->setText(QString("조퇴: %1회").arg(early));
+    ui->label_out->setText(QString("외출: %1회").arg(out));
+    ui->label_absent->setText(QString("결석: %1회").arg(abs));
+    ui->label_rate->setText(QString("출석률: %1% / 결석률: %2%").arg(attendanceRate, 0, 'f', 1).arg(absentRate, 0, 'f', 1));
 }
 
 UserMainpage::~UserMainpage() {

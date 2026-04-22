@@ -14,17 +14,10 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="2">
+   <item row="1" column="1">
     <widget class="QPushButton" name="withdraw_button">
      <property name="text">
       <string>회원 탈퇴</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="modify_button">
-     <property name="text">
-      <string>정보 수정</string>
      </property>
     </widget>
    </item>
@@ -35,30 +28,69 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="3">
-    <layout class="QGridLayout" name="main_layout">
-     <item row="2" column="0">
-      <spacer name="top_spacer">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="search_button">
+   <item row="0" column="0" colspan="2">
+    <layout class="QVBoxLayout" name="main_layout">
+     <item>
+      <widget class="QLabel" name="label_title">
        <property name="text">
-        <string>검색</string>
+        <string>&lt;h2&gt;내 출결 현황&lt;/h2&gt;</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QListView" name="main_view"/>
+     <item>
+      <widget class="QLabel" name="label_present">
+       <property name="text">
+        <string>출석: -</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_late">
+       <property name="text">
+        <string>지각: -</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_early">
+       <property name="text">
+        <string>조퇴: -</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_out">
+       <property name="text">
+        <string>외출: -</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_absent">
+       <property name="text">
+        <string>결석: -</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_rate">
+       <property name="text">
+        <string>출석률: - / 결석률: -</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>

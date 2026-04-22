@@ -62,48 +62,26 @@ public:
     Adminwindow(QJsonArray users_info, Client *client, QWidget *parent = nullptr);
 
 private slots:
-    // 학생 추가 버튼 클릭 시 호출되는 슬롯
-    void on_btnAdd_clicked();
+    void on_btnAdd_clicked(); // 학생 추가 버튼 슬롯
+    void on_btnEdit_clicked(); // 정보 수정 버튼 슬롯
+    void on_btnSave_clicked(); // 정보 저장 버튼 슬롯
+    void on_btnDelete_clicked(); // 학생 삭제 버튼 슬롯
+    void on_btnSearch_clicked(); // 검색 버튼 슬롯
 
-    // 학생 정보 수정 버튼 클릭 시 호출되는 슬롯
-    void on_btnEdit_clicked();
-
-    // 데이터를 JSON 파일로 저장하는 버튼 클릭 시 호출되는 슬롯
-    void on_btnSave_clicked();
-
-    // 선택된 학생 삭제 버튼 클릭 시 호출되는 슬롯
-    void on_btnDelete_clicked();
-
-    // 학생 검색 버튼 클릭 시 호출되는 슬롯
-    void on_btnSearch_clicked();
+    void on_btnAttEdit_clicked(); // 출결 정보 수정 보튼 슬롯
 
 private:
-    // 전체적인 UI 레이아웃 및 구성 요소를 설정하는 함수
-    void setupUI();
+    void setupUI(); // 전체적인 UI 설정 함수
+    QWidget* createStudentPage(); // 학생 정보 관리 페이지를 생성하는 함수
+    QWidget* createAttendanceStatusPage(); // 출결 상태 확인 페이지를 생성하는 함수
 
-    // 학생 정보 관리 페이지(테이블 및 버튼들)를 생성하는 함수
-    QWidget* createStudentPage();
+    void saveData(); // 현재의 studentDatabase 메모리 데이터를 JSON 파일로 저장하는 함수
+    void loadData(const QJsonArray &users_info); // 서버로부터 받은 데이터를 studentDatabase에 로드하는 함수
+    void refreshStudentTable(); // studentDatabase의 정보를 바탕으로 학생 관리 테이블을 갱신하는 함수
+    void refreshAttendanceTable(); // studentDatabase의 정보를 바탕으로 출결 현황 테이블을 갱신하는 함수
+    QJsonObject studentToJson(const Student& s); // Student 구조체를 QJsonObject 포맷(서버 통신용)으로 변환하는 함수
 
-    // 학생들의 출결 상태 확인 페이지를 생성하는 함수
-    QWidget* createAttendanceStatusPage();
-
-    // 현재의 studentDatabase 메모리 데이터를 JSON 파일로 저장하는 함수
-    void saveData();
-
-    // 서버로부터 받은 데이터를 studentDatabase에 로드하는 함수
-    void loadData(const QJsonArray &users_info);
-
-    // studentDatabase의 정보를 바탕으로 학생 관리 테이블을 갱신하는 함수
-    void refreshStudentTable();
-
-    // studentDatabase의 정보를 바탕으로 출결 현황 테이블을 갱신하는 함수
-    void refreshAttendanceTable();
-
-    // Student 구조체를 QJsonObject 포맷(서버 통신용)으로 변환하는 함수
-    QJsonObject studentToJson(const Student& s);
-
-    // 테이블 내의 데이터를 검색 조건(콤보박스, 입력창)에 따라 필터링하는 공통 함수
-    void filterTable(QTableWidget *table, QComboBox *combo, QLineEdit *edit);
+    void filterTable(QTableWidget *table, QComboBox *combo, QLineEdit *edit); // 테이블 내의 데이터를 검색 조건(콤보박스, 입력창)에 따라 필터링하는 함수
 
     // 학생 ID를 키로 하는 학생 데이터 저장 맵
     QMap<QString, Student> studentDatabase;
