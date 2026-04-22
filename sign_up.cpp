@@ -14,9 +14,10 @@ SignUp::SignUp(Client* client, QWidget *parent)
 {
     ui->setupUi(this);
 
-    verified_id = false;
-    this->client = client;
+    verified_id = false; // 기본적으로 중복확인은 되어있지 않기 때문에 false
+    this->client = client; // 서버 통신용 클라이언트 객체
 
+    // 시그널 슬롯 연결하는 부분
     connect(client, SIGNAL(verifiedResult(bool)), this, SLOT(onVerifiedResult(bool)));
     connect(client, SIGNAL(signUpResult(bool)), this, SLOT(onSignUpResult(bool)));
 }
@@ -27,7 +28,7 @@ SignUp::~SignUp()
 }
 
 /**
- * @brief 회원가입 버튼
+ * @brief 회원가입 버튼.
  */
 void SignUp::on_ok_button_clicked()
 {
