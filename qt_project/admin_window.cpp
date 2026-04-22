@@ -29,7 +29,7 @@ void Adminwindow::setupUI()
     sidebar->setFixedWidth(200);
     QVBoxLayout *sidebarLayout = new QVBoxLayout(sidebar);
 
-    QStringList menus = {"학생 정보 관리","일별 출결 현황","학생 출결 정보 관리","로그아웃"};
+    QStringList menus = {"학생 정보 관리", "학생 출결 정보 관리", "프로그램 종료"};
     stackedWidget = new QStackedWidget();
 
     for(int i=0; i<menus.size(); ++i)
@@ -43,7 +43,7 @@ void Adminwindow::setupUI()
         {
             stackedWidget->addWidget(createStudentPage());
         }
-        else if(i == 2)
+        else if(i == 1)
         {
             stackedWidget->addWidget(createAttendanceStatusPage());
         }
@@ -55,25 +55,24 @@ void Adminwindow::setupUI()
         // 2. 통합된 버튼 클릭 연결 (하나만 남김)
         connect(btn, &QPushButton::clicked, [this, i]()
                 {
-                    if (i == 3) // 로그아웃 버튼 (인덱스 3)
+                    if (i == 2) // 프로그램 종료 버튼 (인덱스 2)
                     {
                         QMessageBox::StandardButton reply;
-                        reply = QMessageBox::question(this, "로그아웃 확인", "정말 로그아웃 하시겠습니까?",
+                        reply = QMessageBox::question(this, "프로그램 종료 확인", "프로그램을 종료 하시겠습니까?",
                                                       QMessageBox::Yes | QMessageBox::No);
 
                         if (reply == QMessageBox::Yes) {
                             emit logoutRequested(); // 신호 발생
-                            //this->close();          // 현재 창 닫기
+                            this->close();          // 현재 창 닫기
                         }
                     }
-                    else // 일반 페이지 이동 (0, 1, 2)
+                    else
                     {
                         stackedWidget->setCurrentIndex(i);
                     }
                 });
     }
     sidebarLayout->addStretch();
-
     mainLayout->addWidget(sidebar);
     mainLayout->addWidget(stackedWidget);
 }
@@ -165,6 +164,7 @@ QWidget* Adminwindow::createAttendanceStatusPage() {
 
     // 2. 테이블 구성
     attendanceTable = new QTableWidget(0, 11);
+    // 각 컬럼 헤더 설정: 학생명, 전화번호, ID, 진도(진행일수/전체일수), 출석, 지각, 조퇴, 외출, 결석, 출석률, 진행률
     attendanceTable->setHorizontalHeaderLabels({"학생명", "전화번호", "ID", "진도/전체", "출석", "지각", "조퇴", "외출", "결석", "출석률", "진행률"});
     attendanceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
@@ -431,15 +431,16 @@ void Adminwindow::refreshAttendanceTable()
         nameItem->setData(Qt::UserRole, s.id); // 검색용 ID 저장
         attendanceTable->setItem(row, 0, nameItem);
         attendanceTable->setItem(row, 1, new QTableWidgetItem(s.phone));
-        attendanceTable->setItem(row, 2, new QTableWidgetItem(s.id)); // ID 컬럼 추가
+        attendanceTable->setItem(row, 2, new QTableWidgetItem(s.id)); // 학생 ID
+        // 진행일수 / 전체일수 표시
         attendanceTable->setItem(row, 3, new QTableWidgetItem(QString("%1 / %2").arg(s.attendance.completedDays).arg(s.attendance.totalDays)));
-        attendanceTable->setItem(row, 4, new QTableWidgetItem(QString::number(s.attendance.present)));
-        attendanceTable->setItem(row, 5, new QTableWidgetItem(QString::number(s.attendance.late)));
-        attendanceTable->setItem(row, 6, new QTableWidgetItem(QString::number(s.attendance.early)));
-        attendanceTable->setItem(row, 7, new QTableWidgetItem(QString::number(s.attendance.out)));
-        attendanceTable->setItem(row, 8, new QTableWidgetItem(QString::number(s.attendance.abs)));
-        attendanceTable->setItem(row, 9, new QTableWidgetItem(QString::number(attendanceRate, 'f', 1) + "%"));
-        attendanceTable->setItem(row, 10, new QTableWidgetItem(QString::number(progressRate, 'f', 1) + "%"));
+        attendanceTable->setItem(row, 4, new QTableWidgetItem(QString::number(s.attendance.present))); // 출석 횟수
+        attendanceTable->setItem(row, 5, new QTableWidgetItem(QString::number(s.attendance.late)));    // 지각 횟수
+        attendanceTable->setItem(row, 6, new QTableWidgetItem(QString::number(s.attendance.early)));   // 조퇴 횟수
+        attendanceTable->setItem(row, 7, new QTableWidgetItem(QString::number(s.attendance.out)));     // 외출 횟수
+        attendanceTable->setItem(row, 8, new QTableWidgetItem(QString::number(s.attendance.abs)));     // 결석 횟수
+        attendanceTable->setItem(row, 9, new QTableWidgetItem(QString::number(attendanceRate, 'f', 1) + "%")); // 출석률 (출석/진행일수)
+        attendanceTable->setItem(row, 10, new QTableWidgetItem(QString::number(progressRate, 'f', 1) + "%"));  // 진행률 (진행일수/전체일수)
 
         for(int col = 0; col < 11; ++col) {
             if(attendanceTable->item(row, col))

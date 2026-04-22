@@ -21,13 +21,13 @@
 #include <QMap>
 
 struct AttendanceSummary {
-    int totalDays = 100;
-    int completedDays = 0;
-    int present = 0;
-    int late = 0;
-    int early = 0;
-    int out = 0;
-    int abs = 0;
+    int totalDays = 100;    // 전체 수업 일수
+    int completedDays = 0; // 현재까지 진행된 수업 일수
+    int present = 0;       // 출석 횟수
+    int late = 0;          // 지각 횟수
+    int early = 0;         // 조퇴 횟수
+    int out = 0;           // 외출 횟수
+    int abs = 0;           // 결석 횟수
 };
 
 struct Student {

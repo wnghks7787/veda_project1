@@ -144,6 +144,7 @@ qt_project.exe: CMakeFiles/qt_project.dir/admin_window.cpp.obj
 qt_project.exe: CMakeFiles/qt_project.dir/student_dialog.cpp.obj
 qt_project.exe: CMakeFiles/qt_project.dir/build.make
 qt_project.exe: C:/Qt/6.11.0/mingw_64/lib/libQt6Widgets.a
+qt_project.exe: C:/Qt/6.11.0/mingw_64/lib/libQt6Network.a
 qt_project.exe: C:/Qt/6.11.0/mingw_64/lib/libQt6Gui.a
 qt_project.exe: C:/Qt/6.11.0/mingw_64/lib/libQt6Core.a
 qt_project.exe: C:/Qt/6.11.0/mingw_64/lib/libQt6EntryPoint.a
