@@ -1,7 +1,7 @@
 #include "login.h"
 #include "./ui_login.h"
 #include "sign_up.h"
-
+#include "adminwindow.h"
 #include <QMessageBox>
 
 Login::Login(QWidget *parent)
@@ -40,10 +40,19 @@ void Login::onLoginResult(bool success, QJsonObject user_json)
             "로그인 성공",
             QString("%1님 환영합니다.").arg(user->getName()),
             QMessageBox::Ok);
+        if(user->getId() == "admin")
+        {
+            Adminwindow* admin_page = new Adminwindow();
+            admin_page->setAttribute(Qt::WA_DeleteOnClose);
+            admin_page->show();
+        }
+        else
+        {
+            UserMainpage* user_page = new UserMainpage(client, user);
+            user_page->setAttribute(Qt::WA_DeleteOnClose);
+            user_page->show();
+        }
 
-        UserMainpage* user_page = new UserMainpage(client, user);
-        user_page->setAttribute(Qt::WA_DeleteOnClose);
-        user_page->show();
 
         this->close();
     }

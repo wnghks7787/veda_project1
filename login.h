@@ -28,11 +28,11 @@ private slots:
     void onLoginResult(bool success, QJsonObject user_json);
 
 private:
-    QMessageBox::StandardButton msg_box;
+    QMessageBox::StandardButton msg_box; // 메시지 박스
 
-    UserMainpage* user_page;
+    UserMainpage* user_page; // 유저 페이지
     Ui::Widget *ui;
 
-    Client* client;
+    Client* client; // 클라이언트 소켓
 };
 #endif // LOGIN_H

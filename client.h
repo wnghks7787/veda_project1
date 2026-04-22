@@ -31,7 +31,7 @@ private slots:
     void onDisconnected();
 
 private:
-    QTcpSocket* socket;
+    QTcpSocket* socket; // 클라이언트 소켓
 };
 
 #endif // CLIENT_H

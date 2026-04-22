@@ -36,9 +36,9 @@ private slots:
 private:
     Ui::sign_up_dialog* ui;
 
-    bool verified_id;
-    QMessageBox::StandardButton reply;
-    Client* client;
+    bool verified_id; // id 중복 확인
+    QMessageBox::StandardButton reply; // 메시지 박스
+    Client* client; // 클라이언트 소켓
 };
 
 #endif // SIGN_UP_H

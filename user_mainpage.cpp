@@ -14,6 +14,15 @@ UserMainpage::UserMainpage(Client* client, User* user, QWidget *parent)
 
     this->client = client;
     this->user = user;
+
+    setWindowTitle("출결 확인 시스템");
+    resize(1100, 700);
+
+    QWidget* sidebar = new QWidget();
+    sidebar->setStyleSheet("background-coolor: #2c3e50");
+    sidebar->setFixedWidth(200);
+
+
 }
 
 UserMainpage::~UserMainpage() {
@@ -24,7 +33,9 @@ void UserMainpage::setId(QString &id)
 {
     this->id = id;
 }
-
+/**
+ * @brief 로그아웃 로직. 현 화면을 닫고 로귿인 페이지를 띄워준다.
+ */
 void UserMainpage::on_logout_button_clicked()
 {
     msg_box = QMessageBox::information(
@@ -48,7 +59,9 @@ void UserMainpage::on_logout_button_clicked()
     }
 }
 
-
+/**
+ * @brief 회원 탈퇴 로직
+ */
 void UserMainpage::on_withdraw_button_clicked()
 {
     msg_box = QMessageBox::critical(
