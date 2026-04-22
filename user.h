@@ -4,11 +4,13 @@
 #include <QString>
 #include <QDate>
 
+#include "client.h"
+
 class User
 {
 public:
     User();
-    User(QString id);
+    User(QJsonObject user_json);
     ~User();
 
     QString getName() const;
@@ -30,7 +32,9 @@ public:
     int getEarly_leave() const;
     int getBe_out() const;
 
-    bool withdraw();
+    QJsonObject getUserJson();
+
+    void withdraw();
 
 private:
     QString name;
@@ -44,6 +48,8 @@ private:
     int late;
     int early_leave;
     int be_out;
+
+    Client* client;
 };
 
 #endif // USER_H

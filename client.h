@@ -1,30 +1,38 @@
-// #ifndef CLIENT_H
-// #define CLIENT_H
+#ifndef CLIENT_H
+#define CLIENT_H
 
-// #include <QObject>
-// #include <QtNetwork/QTcpSocket>
+#include <QObject>
+#include <QJsonObject>
+#include <QtNetwork/QTcpSocket>
 
-// class Client : QObject
-// {
-//     Q_OBJECT
+class Client : public QObject
+{
+    Q_OBJECT
 
-// public:
-//     explicit Client(QObject *parent = nullptr);
+public:
+    explicit Client(QObject *parent = nullptr);
 
-//     void connectToServer(QString host = "127.0.0.1", int port = 1234);
-//     void sendLogin(QString id, QString pw);
+    void connectToServer(QString host = "127.0.0.1", int port = 12345);
+    void sendLogin(QString id, QString pw);
+    void sendWithdraw(QString id);
+    void sendVerifyId(QString id);
+    void sendSignUp(QJsonObject user);
 
-// signals:
-//     void connected();
-//     void disconnected();
+signals:
+    void loginResult(bool success, QJsonObject user);
+    void loginResultAdmin(bool success, QJsonObject user, QJsonArray users);
+    void verifiedResult(bool success);
+    void signUpResult(bool success);
+    void connected();
+    void disconnected();
 
-// private slots:
-//     void onConnected();
-//     void onReadyRead();
-//     void onDisconnected();
+private slots:
+    void onConnected();
+    void onReadyRead();
+    void onDisconnected();
 
-// private:
-//     QTcpSocket* socket;
-// };
+private:
+    QTcpSocket* socket; // 클라이언트 소켓
+};
 
-// #endif // CLIENT_H
+#endif // CLIENT_H

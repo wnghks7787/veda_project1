@@ -16,7 +16,7 @@ class UserMainpage : public QWidget
     Q_OBJECT
 
 public:
-    explicit UserMainpage(QString id, QWidget *parent = nullptr);
+    explicit UserMainpage(Client* client, User* user, QWidget *parent = nullptr);
     ~UserMainpage() override;
 
     void setId(QString &id);
@@ -29,11 +29,12 @@ private slots:
 private:
     Ui::user_page *ui;
 
-    QString id;
-    QMessageBox::StandardButton msg_box;
-    User* user;
+    QString id; // 로그인 한 유저의 아이디
+    QMessageBox::StandardButton msg_box; // 메시지 박스
+    User* user; // 로그인 한 유저의 정보
+    Client* client; // 클라이언트 소켓
 
-    void withdraw();
+    // void setupUi();
 };
 
 #endif // USER_MAINPAGE_H
